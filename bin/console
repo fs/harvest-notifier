@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby -Ilib
+
+require "bundler/setup"
+
+# include here main library file
+# require "main-file"
+
+require "irb"
+IRB.start

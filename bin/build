@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+set -e
+
+bin/quality
+bin/rspec

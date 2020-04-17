@@ -1,0 +1,53 @@
+version: v1.0
+name: ruby-base
+
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+execution_time_limit:
+  hours: 1
+
+auto_cancel:
+  queued:
+    when: 'true'
+
+fail_fast:
+  cancel:
+    when: 'true'
+
+global_job_config:
+  prologue:
+    commands:
+      - checkout
+      - cache restore
+
+blocks:
+  - name: Setup
+    task:
+      jobs:
+        - name: Setup
+          commands:
+            - bundle install
+            - cache store
+
+  - name: Quality
+    task:
+      jobs:
+        - name: Quality
+          commands:
+            - bundle install
+            - bin/quality
+
+  - name: Test
+    task:
+      prologue:
+        commands:
+          - sem-version ruby 2.6.5
+          - bundle install
+
+      jobs:
+      - name: Specs
+        commands:
+          - bundle exec rspec

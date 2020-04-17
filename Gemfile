@@ -16,4 +16,5 @@ group :development do
   gem "rspec"
   gem "rubocop"
   gem "rubocop-rspec", require: false
+  gem "timecop"
 end

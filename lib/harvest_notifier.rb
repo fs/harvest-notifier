@@ -8,10 +8,6 @@ require "dotenv/load"
 
 module HarvestNotifier
   class Base
-    extend Forwardable
-
-    def_delegators :harvest_client, :users_list
-
     def create_daily_report
       @from = @to = Date.yesterday
     end
@@ -37,7 +33,7 @@ module HarvestNotifier
     end
 
     def harvest_client
-      @harvest_client ||= Clients::Harvest.new(ENV["HARVEST_ACCOUNT_ID"], ENV["HARVEST_TOKEN"])
+      Clients::Harvest.new(ENV["HARVEST_ACCOUNT_ID"], ENV["HARVEST_TOKEN"])
     end
   end
 end

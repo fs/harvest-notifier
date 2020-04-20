@@ -8,6 +8,7 @@ gem "dotenv"
 gem "httparty"
 gem "rake"
 gem "rollbar"
+gem "slack-ruby-client"
 gem "snitcher"
 
 group :development do

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "harvest-notifier/rollbar"
+require "harvest-notifier/slack"
 
 module HarvestNotifier
   class Base

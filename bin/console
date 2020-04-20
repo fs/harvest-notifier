@@ -1,9 +1,7 @@
-#!/usr/bin/env ruby -Ilib
+#!/usr/bin/env ruby
 
 require "bundler/setup"
-
-# include here main library file
-# require "main-file"
+require "./lib/harvest_notifier"
 
 require "irb"
-IRB.start
+IRB.start(__FILE__)

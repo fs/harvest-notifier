@@ -48,19 +48,19 @@ module HarvestNotifier
       def get(resource, options = {})
         resource_url = "#{API_URL}/#{resource}.json#{to_param(options)}"
         response = HTTParty.get(resource_url, headers: auth_headers)
-        response.success? ? JSON.parse(response.body) : nil
+        response.success? ? JSON.parse(response.body) : {}
       end
 
       def active_users
         result = get("users", { is_active: true })
 
-        @active_users ||= result ? result["users"] : []
+        @active_users ||= result["users"]
       end
 
       def time_report(from, to)
         result = get("reports/time/team", { from: prepare_date(from), to: prepare_date(to) })
 
-        @time_report ||= result ? result["results"] : []
+        @time_report ||= result["results"]
       end
 
       def user_fullname(user)

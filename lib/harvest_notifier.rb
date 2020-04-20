@@ -13,7 +13,7 @@ module HarvestNotifier
     def_delegators :harvest_client, :users_list
 
     def create_daily_report
-      @from = @to = Date.yesterday + 1
+      @from = @to = Date.yesterday
     end
 
     def create_weekly_report

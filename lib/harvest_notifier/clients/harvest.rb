@@ -17,11 +17,11 @@ module HarvestNotifier
           data = {
             id: user["id"],
             user_name: user_fullname(user),
-            user_email: user["email"],
+            email: user["email"],
             weekly_capacity: user["weekly_capacity"]
           }
 
-          User.new(data)
+          ValueObject::User.new(data)
         end
       end
 

@@ -8,13 +8,19 @@ require "dotenv/load"
 
 module HarvestNotifier
   class Base
+    DAILY_REPORT = %w[Tuesday Wednesday Thursday Friday].freeze
+
     def create_daily_report
+      return unless daily_suitable?
+
       @from = @to = Date.yesterday
     end
 
     def create_weekly_report
-      @from = Date.beginning_of_week
-      @to = Date.today.end_of_week - 2
+      return unless Date.today.monday?
+
+      @from = Date.today.beginning_of_week.last_week
+      @to = @from + 4.days
     end
 
     def create_period_report(from, to)
@@ -23,6 +29,10 @@ module HarvestNotifier
     end
 
     private
+
+    def daily_suitable?
+      DAILY_REPORT.include?(Date.today.strftime("%A"))
+    end
 
     def time_report_list
       harvest_client.time_report_list(@from, @to)

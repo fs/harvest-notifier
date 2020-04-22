@@ -6,6 +6,8 @@ require "dotenv"
 
 Dotenv.load(".env.example")
 
+require "harvest_notifier"
+
 module Helpers
   def fixture(name)
     JSON.parse(File.read("spec/fixtures/#{name}.json"))
@@ -13,6 +15,8 @@ module Helpers
 end
 
 RSpec.configure do |config|
+  config.include(Helpers)
+
   config.expect_with :rspec do |expectations|
     expectations.syntax = :expect
   end

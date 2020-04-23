@@ -2,8 +2,8 @@
 
 module HarvestNotifier
   class HarvestFilter
-    def initialize(users, time_report)
-      @harvest_users = users
+    def initialize(harvest_users, time_report)
+      @harvest_users = harvest_users
       @time_report = time_report
     end
 
@@ -30,7 +30,7 @@ module HarvestNotifier
     end
 
     def emails_whitelist
-      ENV["EMAILS_WHITELIST"].split(",")
+      ENV["EMAILS_WHITELIST"].split(",").strip
     end
   end
 end

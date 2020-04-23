@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "httparty"
+
 module HarvestNotifier
   class Harvest
     API_URL = "https://api.harvestapp.com/api/v2"
@@ -21,7 +23,7 @@ module HarvestNotifier
       end
     end
 
-    def time_report_list(from, to)
+    def time_report_list(from, to = from)
       time_report(from, to).map do |report|
         {
           user_id: report["user_id"],

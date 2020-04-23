@@ -38,7 +38,6 @@ GEM
       ast (~> 2.4.0)
     rainbow (3.0.0)
     rake (13.0.1)
-    require_all (3.0.0)
     rexml (3.2.4)
     rollbar (2.24.0)
     rspec (3.9.0)
@@ -93,7 +92,6 @@ DEPENDENCIES
   dotenv
   httparty
   rake
-  require_all
   rollbar
   rspec
   rubocop

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe HarvestNotifier::Base do
+describe HarvestNotifier do
   let(:harvest_double) { instance_double(HarvestNotifier::Harvest) }
   let(:slack_double) { instance_double(HarvestNotifier::Slack) }
   let(:harvest_filter_double) { instance_double(HarvestNotifier::HarvestFilter) }
@@ -31,7 +31,7 @@ describe HarvestNotifier::Base do
         expect(harvest_double)
           .to receive(:users_list) { harvest_users_list }
 
-        described_class.new.create_daily_report
+        described_class.create_daily_report
       end
     end
   end

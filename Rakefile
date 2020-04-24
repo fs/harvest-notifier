@@ -15,7 +15,7 @@ namespace :reports do
 
   desc "This task send report for the past day"
   task :daily do
-    HarvestNotifier.create_daily_report
+    HarvestNotifier.create_report(:daily)
     Snitcher.snitch(ENV["SNITCH_DAILY"]) if ENV["SNITCH_DAILY"]
   end
 end

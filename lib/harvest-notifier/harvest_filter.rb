@@ -74,7 +74,7 @@ module HarvestNotifier
     end
 
     def emails_whitelist
-      ENV["EMAILS_WHITELIST"].split(",").collect(&:strip)
+      ENV["EMAILS_WHITELIST"].split(",").map(&:strip)
     end
   end
 end

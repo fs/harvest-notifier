@@ -11,7 +11,7 @@ module HarvestNotifier
     def create_daily_report
       return unless working_day?
 
-      users_data = HarvestFilter.new(:daily).filter_users
+      HarvestFilter.new(:daily).filter_users
     end
 
     def create_weekly_report

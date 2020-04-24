@@ -6,6 +6,7 @@ ruby "2.6.5"
 
 gem "dotenv"
 gem "httparty"
+gem "jbuilder"
 gem "rake"
 gem "rollbar"
 gem "slack-ruby-client"

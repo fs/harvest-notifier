@@ -6,6 +6,8 @@ require "harvest-notifier/harvest"
 
 module HarvestNotifier
   class HarvestFilter
+    attr_reader :from, :to, :type
+
     delegate :users_list, :time_report_list, to: :harvest_client, prefix: :harvest
 
     def initialize(type)
@@ -19,13 +21,15 @@ module HarvestNotifier
     end
 
     def filter_users
-      case @type
+      case type
       when :daily
         daily_report
       when :weekly
         weekly_report
       end
     end
+
+    private
 
     def daily_report
       users = daily_filter_users
@@ -36,8 +40,6 @@ module HarvestNotifier
     def weekly_report
       # weekly result
     end
-
-    private
 
     def daily_initialize
       @from = Date.yesterday
@@ -66,7 +68,7 @@ module HarvestNotifier
     end
 
     def time_report_user_ids
-      harvest_time_report_list(@from, @to).map { |r| r[:user_id] }
+      harvest_time_report_list(from, to).map { |r| r[:user_id] }
     end
 
     def harvest_client

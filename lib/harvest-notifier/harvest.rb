@@ -4,7 +4,9 @@ require "httparty"
 
 module HarvestNotifier
   class Harvest
-    API_URL = "https://api.harvestapp.com/api/v2"
+    include HTTParty
+
+    base_uri "https://api.harvestapp.com/api/v2"
 
     attr_reader :account_id, :token
 
@@ -43,8 +45,8 @@ module HarvestNotifier
     end
 
     def get(resource, options = {})
-      resource_url = "#{API_URL}/#{resource}.json#{to_param(options)}"
-      response = HTTParty.get(resource_url, headers: auth_headers)
+      resource_url = "/#{resource}.json#{to_param(options)}"
+      response = self.class.get(resource_url, headers: auth_headers)
       response.success? ? JSON.parse(response.body) : {}
     end
 

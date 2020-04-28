@@ -34,7 +34,11 @@ module HarvestNotifier
     def daily_report
       users = daily_filter_users
 
-      get_emails(users)
+      users.map do |u|
+        {
+          email: u[:email]
+        }
+      end
     end
 
     def weekly_report
@@ -51,10 +55,6 @@ module HarvestNotifier
       @to = @from + 4.days
     end
 
-    def get_emails(users)
-      users.map { |u| u[:email] }
-    end
-
     def daily_filter_users
       harvest_users_list.reject do |user|
         time_report_user_ids.include?(user[:id]) || emails_whitelist.include?(user[:email])
@@ -68,7 +68,7 @@ module HarvestNotifier
     end
 
     def time_report_user_ids
-      harvest_time_report_list(from, to).map { |r| r[:user_id] }
+      @time_report_user_ids ||= harvest_time_report_list(from, to).map { |r| r[:user_id] }
     end
 
     def harvest_client

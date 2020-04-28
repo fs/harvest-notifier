@@ -4,11 +4,11 @@ source "https://rubygems.org"
 
 ruby "2.6.5"
 
+gem "activesupport"
 gem "dotenv"
 gem "httparty"
 gem "rake"
 gem "rollbar"
-gem "slack-ruby-client"
 gem "snitcher"
 
 group :development do

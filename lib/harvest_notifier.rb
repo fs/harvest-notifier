@@ -12,7 +12,10 @@ require "harvest-notifier/templates/weekly"
 module HarvestNotifier
   class Base
     def create_daily_report
-      users_data = ["vadim.kurnatovskiy@flatstack.com"]
+      # weekly_users_data = [{email: "vadim.kurnatovskiy@flatstack.com", missing_hours: 4},
+      #              {email: "example@flatstack.com", missing_hours: 8}]
+
+      users_data = [{ email: "vadim.kurnatovskiy@flatstack.com" }, { email: "example@flatstack.com" }]
 
       SlackSender.new(users_data, HarvestNotifier::Templates::Daily).notify
     end

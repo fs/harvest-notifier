@@ -10,27 +10,33 @@ module HarvestNotifier
     end
 
     def notify
-      client.chat_postMessage(channel: ENV["SLACK_CHANNEL"],
-                              text: text,
-                              attachments: attachments)
+      client.post_message(generate_from_template)
     end
 
     private
 
-    def text
-      generate_from_template[:text]
+    def slack_users
+      @slack_users ||= client.users_list
     end
 
-    def attachments
-      generate_from_template[:attachments]
+    def prepared_users_data
+      users_data.map do |user|
+        slack_users.map do |slack_user|
+          next if user[:email] != slack_user[:email]
+
+          user[:id] = slack_user[:id]
+        end
+      end
+
+      users_data
     end
 
     def generate_from_template
-      template.generate(users_data)
+      template.generate(users_data: prepared_users_data)
     end
 
     def client
-      Slack::Web::Client.new
+      HarvestNotifier::Slack.new
     end
   end
 end

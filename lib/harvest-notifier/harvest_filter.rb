@@ -42,7 +42,14 @@ module HarvestNotifier
     end
 
     def weekly_report
-      # weekly result
+      users = weekly_filter_users
+
+      users.map do |u|
+        {
+          email: u[:email],
+          missing_hours: u[:missing_hours]
+        }
+      end
     end
 
     def daily_initialize

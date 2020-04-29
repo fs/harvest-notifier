@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
+require "webmock/rspec"
 require "timecop"
 require "byebug"
-require "dotenv"
 
-Dotenv.load(".env.example")
+require "harvest_notifier"
 
 require "harvest_notifier"
 

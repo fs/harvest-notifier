@@ -18,4 +18,5 @@ group :development do
   gem "rubocop"
   gem "rubocop-rspec", require: false
   gem "timecop"
+  gem "webmock"
 end

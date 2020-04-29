@@ -19,28 +19,7 @@ module HarvestNotifier
     end
 
     def users_list
-      data = []
-      receive_users_list.map do |user|
-        next if user["deleted"] == true || user["is_bot"] == true
-
-        data << { id: user["id"], email: user["profile"]["email"] }
-      end
-
-      data
-    end
-
-    private
-
-    def receive_users_list
-      value = self.class.get(
-        "/users.list",
-        headers: {
-          "Content-type" => "application/json",
-          "Authorization" => "Bearer #{@token}"
-        }
-      )["members"]
-
-      JSON.parse(value)
+      self.class.get("/users.list")
     end
   end
 end

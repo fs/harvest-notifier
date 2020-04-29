@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "user_id": 123,
+      "user_name": "John Smith",
+      "is_contractor": false,
+      "total_hours": 40.0,
+      "billable_hours": 40.0,
+      "currency": "USD",
+      "billable_amount": 0.0
+    },
+    {
+      "user_id": 321,
+      "user_name": "Bill Doe",
+      "is_contractor": false,
+      "total_hours": 28.0,
+      "billable_hours": 28.0,
+      "currency": "USD",
+      "billable_amount": 0.0
+    },
+    {
+      "user_id": 456,
+      "user_name": "Emma Johnson",
+      "is_contractor": false,
+      "total_hours": 35.0,
+      "billable_hours": 0.0,
+      "currency": "USD",
+      "billable_amount": 0.0
+    },
+    {
+      "user_id": 654,
+      "user_name": "Mia Williams",
+      "is_contractor": false,
+      "total_hours": 0.0,
+      "billable_hours": 0.0,
+      "currency": "USD",
+      "billable_amount": 0.0
+    }
+  ]
+}

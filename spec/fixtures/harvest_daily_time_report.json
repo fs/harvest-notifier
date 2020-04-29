@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "user_id": 123,
+      "user_name": "John Smith",
+      "is_contractor": false,
+      "total_hours": 40.0,
+      "billable_hours": 40.0,
+      "currency": "USD",
+      "billable_amount": 0.0
+    },
+    {
+      "user_id": 321,
+      "user_name": "Bill Doe",
+      "is_contractor": false,
+      "total_hours": 40.0,
+      "billable_hours": 40.0,
+      "currency": "USD",
+      "billable_amount": 0.0
+    }
+  ]
+}

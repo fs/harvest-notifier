@@ -11,7 +11,7 @@ describe HarvestNotifier::Slack do
 
     before do
       stub_request(:get, "https://slack.com/api/users.list")
-        .with(headers: { "Authorization" => "Bearer #{token}" }).to_return(body: slack_users_list)
+        .with(headers: { "Authorization" => "Bearer #{token}" }).to_return(body: slack_users_list.to_json)
     end
 
     it "return members data" do

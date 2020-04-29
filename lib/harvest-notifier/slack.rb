@@ -17,7 +17,7 @@ module HarvestNotifier
         "/chat.postMessage",
         headers: {
           "Content-type" => "application/json",
-          "Authorization" => "Bearer #{ENV['SLACK_TOKEN']}"
+          "Authorization" => "Bearer #{@token}"
         },
         body: body
       )
@@ -37,12 +37,15 @@ module HarvestNotifier
     private
 
     def receive_users_list
-      self.class.get(
+      value = self.class.get(
         "/users.list",
         headers: {
+          "Content-type" => "application/json",
           "Authorization" => "Bearer #{@token}"
         }
       )["members"]
+
+      JSON.parse(value)
     end
   end
 end

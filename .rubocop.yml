@@ -5,6 +5,16 @@ AllCops:
   Exclude:
     - bin/**/*
 
+RSpec/MultipleExpectations:
+  Max: 2
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
 Style/Documentation:
   Description: 'Document classes and non-namespace modules.'
   Enabled: false

@@ -24,12 +24,14 @@ module HarvestNotifier
     end
 
     def users_list
+      data = []
       receive_users_list.map do |user|
-        {
-          id: user["id"],
-          email: user["profile"]["email"]
-        }
+        next if user["deleted"] == true || user["is_bot"] == true
+
+        data << { id: user["id"], email: user["profile"]["email"] }
       end
+
+      data
     end
 
     private

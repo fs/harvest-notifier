@@ -1,9 +1,8 @@
-#!/usr/bin/env ruby -Ilib
+#!/usr/bin/env ruby
 
+$: << 'lib'
 require "bundler/setup"
-
-# include here main library file
-# require "main-file"
+require "harvest_notifier"
 
 require "irb"
 IRB.start

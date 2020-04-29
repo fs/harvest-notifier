@@ -8,7 +8,6 @@ gem "dotenv"
 gem "httparty"
 gem "rake"
 gem "rollbar"
-gem "slack-ruby-client"
 gem "snitcher"
 
 group :development do
@@ -18,4 +17,5 @@ group :development do
   gem "rubocop"
   gem "rubocop-rspec", require: false
   gem "timecop"
+  gem "webmock"
 end

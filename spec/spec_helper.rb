@@ -3,9 +3,6 @@
 require "webmock/rspec"
 require "timecop"
 require "byebug"
-require "dotenv"
-
-Dotenv.load(".env.example")
 
 require "harvest_notifier"
 

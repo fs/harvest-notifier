@@ -42,14 +42,14 @@ module HarvestNotifier
     end
 
     def weekly_report
-      users = weekly_filter_users
+      # users = weekly_filter_users
 
-      users.map do |u|
-        {
-          email: u[:email],
-          missing_hours: u[:missing_hours]
-        }
-      end
+      # users.map do |u|
+      #   {
+      #     email: u[:email],
+      #     missing_hours: u[:missing_hours]
+      #   }
+      # end
     end
 
     def daily_initialize
@@ -65,12 +65,6 @@ module HarvestNotifier
     def daily_filter_users
       harvest_users_list.reject do |user|
         time_report_user_ids.include?(user[:id]) || emails_whitelist.include?(user[:email])
-      end
-    end
-
-    def weekly_filter_users
-      users_list_with_time.reject do |user|
-        emails_whitelist.include?(user[:email])
       end
     end
 

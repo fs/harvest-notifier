@@ -7,20 +7,15 @@ module HarvestNotifier
     include HTTParty
 
     base_uri "https://slack.com/api"
+    headers "Content-type" => "application/json"
+    logger ::Logger.new STDOUT
 
     def initialize(token)
-      @token = token
+      self.class.headers "Authorization" => "Bearer #{token}"
     end
 
     def post_message(body)
-      self.class.post(
-        "/chat.postMessage",
-        headers: {
-          "Content-type" => "application/json",
-          "Authorization" => "Bearer #{@token}"
-        },
-        body: body
-      )
+      self.class.post("/chat.postMessage", body: body)
     end
 
     def users_list

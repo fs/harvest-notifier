@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "harvest-notifier/harvest_filter"
+require "harvest-notifier/report"
 
 require "active_support/core_ext/date/calculations"
 
@@ -11,13 +11,13 @@ module HarvestNotifier
     def create_daily_report
       return unless working_day?
 
-      HarvestFilter.new(:daily).filter_users
+      Report.new(:daily).filter_users
     end
 
     def create_weekly_report
       return unless Date.today.monday?
 
-      HarvestFilter.new(:weekly).filter_users
+      Report.new(:weekly).filter_users
     end
 
     private

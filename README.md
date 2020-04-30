@@ -49,9 +49,7 @@ heroku config:set EMAIL_WHITELIST=
 
 ## Credits
 
-Ruby Base is maintained by [Timur Vafin](http://github.com/timurvafin).
 It was written by [Flatstack](http://www.flatstack.com) with the help of our
 [contributors](http://github.com/fs/ruby-base/contributors).
-
 
 [<img src="http://www.flatstack.com/logo.svg" width="100"/>](http://www.flatstack.com)

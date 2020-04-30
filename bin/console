@@ -3,7 +3,6 @@
 $: << 'lib'
 require "bundler/setup"
 require "harvest_notifier"
-require "dotenv/load"
 
 require "irb"
 IRB.start

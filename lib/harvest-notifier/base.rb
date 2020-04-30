@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/date/calculations"
+
 require "harvest-notifier/report"
 require "harvest-notifier/harvest"
-
-require "active_support/core_ext/date/calculations"
 
 module HarvestNotifier
   class Base
@@ -28,7 +28,7 @@ module HarvestNotifier
     end
 
     def harvest_client
-      Harvest.new(ENV["HARVEST_TOKEN"], ENV["HARVEST_ACCOUNT_ID"])
+      Harvest.new(ENV.fetch("HARVEST_TOKEN"), ENV.fetch("HARVEST_ACCOUNT_ID"))
     end
   end
 end

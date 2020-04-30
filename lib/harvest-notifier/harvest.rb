@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "httparty"
+require "active_support/core_ext/object/to_query"
 
 module HarvestNotifier
   class Harvest
@@ -19,9 +20,9 @@ module HarvestNotifier
     end
 
     def time_report_list(from, to = from)
-      query = "?from=#{prepare_date(from)}&to=#{prepare_date(to)}"
+      params = {from: prepare_date(from), to: prepare_date(to)}
 
-      self.class.get("/reports/time/team.json#{query}")
+      self.class.get("/reports/time/team.json?#{params.to_query}")
     end
 
     private

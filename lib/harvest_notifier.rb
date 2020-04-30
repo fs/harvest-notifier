@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "byebug"
-require "dotenv/load"
+# require "dotenv/load"
 require "rollbar"
 require "harvest-notifier/base"
 require "harvest-notifier/slack"

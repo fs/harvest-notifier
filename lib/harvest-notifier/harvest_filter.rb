@@ -11,12 +11,6 @@ module HarvestNotifier
     delegate :users_list, :time_report_list, to: :harvest_client, prefix: :harvest
 
     def initialize(type)
-      case type
-      when :daily
-        daily_initialize
-      when :weekly
-        weekly_initialize
-      end
       @type = type
     end
 
@@ -32,16 +26,20 @@ module HarvestNotifier
     private
 
     def daily_report
+      @from = Date.yesterday
+
       users = daily_filter_users
 
       users.map do |u|
         {
-          email: u[:email]
+          email: u["email"]
         }
       end
     end
 
     def weekly_report
+      # @from = Date.today.last_week
+      # @to = @from + 4.days
       # users = weekly_filter_users
 
       # users.map do |u|
@@ -52,28 +50,18 @@ module HarvestNotifier
       # end
     end
 
-    def daily_initialize
-      @from = Date.yesterday
-      @to = @from
-    end
-
-    def weekly_initialize
-      @from = Date.today.last_week
-      @to = @from + 4.days
-    end
-
     def daily_filter_users
-      harvest_users_list.reject do |user|
-        time_report_user_ids.include?(user[:id]) || emails_whitelist.include?(user[:email])
+      harvest_users_list["users"].reject do |user|
+        time_report_user_ids.include?(user["id"]) || emails_whitelist.include?(user["email"])
       end
     end
 
     def time_report_user_ids
-      @time_report_user_ids ||= harvest_time_report_list(from, to).map { |r| r[:user_id] }
+      @time_report_user_ids ||= harvest_time_report_list(from)["results"].map { |r| r["user_id"] }
     end
 
     def harvest_client
-      @harvest_client ||= Harvest.new(ENV["HARVEST_ACCOUNT_ID"], ENV["HARVEST_TOKEN"])
+      @harvest_client ||= Harvest.new(ENV["HARVEST_TOKEN"], ENV["HARVEST_ACCOUNT_ID"])
     end
 
     def emails_whitelist

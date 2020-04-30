@@ -3,10 +3,11 @@
 require "webmock/rspec"
 require "timecop"
 require "byebug"
+require "dotenv"
 
 require "harvest_notifier"
 
-require "harvest_notifier"
+Dotenv.load(".env.example")
 
 module Helpers
   def fixture(name)

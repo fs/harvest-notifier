@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 describe HarvestNotifier do
-  let(:slack_double) { instance_double(HarvestNotifier::Slack) }
   let(:harvest_filter_double) { instance_double(HarvestNotifier::HarvestFilter) }
 
   let(:harvest_daily_time_report) { fixture("harvest_daily_time_report") }

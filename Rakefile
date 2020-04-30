@@ -10,13 +10,13 @@ require "harvest_notifier"
 namespace :reports do
   desc "This task send report for the last week"
   task :weekly do
-    HarvestNotifier.create_report(:weekly)
+    HarvestNotifier.create_weekly_report
     Snitcher.snitch(ENV["SNITCH_DAILY"]) if ENV["SNITCH_DAILY"]
   end
 
   desc "This task send report for the past day"
   task :daily do
-    HarvestNotifier.create_report(:daily)
+    HarvestNotifier.create_daily_report
     Snitcher.snitch(ENV["SNITCH_DAILY"]) if ENV["SNITCH_DAILY"]
   end
 end

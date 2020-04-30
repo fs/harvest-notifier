@@ -2,11 +2,9 @@
 
 require "active_support/core_ext/module/delegation"
 
-require "harvest-notifier/harvest"
-
 module HarvestNotifier
   class Report
-    attr_reader :from, :to, :type
+    attr_reader :from, :to, :harvest_client
 
     delegate :users_list, :time_report_list, to: :harvest_client, prefix: :harvest
 
@@ -21,12 +19,12 @@ module HarvestNotifier
 
       users.map do |u|
         {
-          email: u["email"]
+          "email" => u["email"]
         }
       end
     end
 
-    def weekly_report
+    def weekly
       # @from = Date.today.last_week
       # @to = @from + 4.days
       # users = weekly_filter_users
@@ -38,6 +36,8 @@ module HarvestNotifier
       #   }
       # end
     end
+
+    private
 
     def daily_filter_users
       harvest_users_list["users"].reject do |user|

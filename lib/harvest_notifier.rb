@@ -9,7 +9,11 @@ require "harvest-notifier/harvest"
 module HarvestNotifier
   module_function
 
-  def create_report(type)
-    HarvestNotifier::Base.new.public_send("create_#{type}_report")
+  def create_daily_report
+    HarvestNotifier::Base.new.create_daily_report
+  end
+
+  def create_weekly_report
+    HarvestNotifier::Base.new.create_weekly_report
   end
 end

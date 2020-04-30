@@ -1,30 +1,40 @@
 # frozen_string_literal: true
 
 describe HarvestNotifier do
-  let(:harvest_filter_double) { instance_double(HarvestNotifier::HarvestFilter) }
-
-  let(:harvest_daily_time_report) { fixture("harvest_daily_time_report") }
-  let(:harvest_weekly_time_report) { fixture("harvest_weekly_time_report") }
-  let(:harvest_users_list) { fixture("harvest_users_list") }
-  let(:emails_data) { ["john.smith@example.com, bill.doe@example.com"] }
+  let(:base_bouble) { instance_double(HarvestNotifier::Base) }
 
   before do
-    allow(HarvestNotifier::HarvestFilter)
-      .to receive(:new).with(type) { harvest_filter_double }
-    allow(harvest_filter_double).to receive(:filter_users)
+    allow(HarvestNotifier::Base)
+      .to receive(:new) { base_bouble }
   end
 
-  describe "notification create" do
-    context "when daily report" do
-      let(:harvest_time_report) { harvest_daily_time_report }
-      let(:type) { :daily }
+  describe "#create_daily_report" do
+    before do
+      allow(base_bouble).to receive(:create_daily_report)
+    end
 
-      it "creates daily notification" do
-        expect(harvest_filter_double)
-          .to receive(:filter_users) { emails_data }
+    it "creates daily report" do
+      expect(base_bouble)
+        .to receive(:create_daily_report)
+      expect(base_bouble)
+        .not_to receive(:create_weekly_report)
 
-        described_class.create_report(type)
-      end
+      described_class.create_daily_report
+    end
+  end
+
+  describe "#create_weekly_report" do
+    before do
+      allow(base_bouble).to receive(:create_weekly_report)
+    end
+
+    it "creates daily report" do
+      expect(base_bouble)
+        .to receive(:create_weekly_report)
+      expect(base_bouble)
+        .not_to receive(:create_daily_report)
+
+      described_class.create_weekly_report
     end
   end
 end

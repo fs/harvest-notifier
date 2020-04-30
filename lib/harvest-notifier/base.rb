@@ -28,7 +28,7 @@ module HarvestNotifier
     end
 
     def harvest_client
-      HarvestNotifier::Harvest.new(ENV["HARVEST_TOKEN"], ENV["HARVEST_ACCOUNT_ID"])
+      Harvest.new(ENV["HARVEST_TOKEN"], ENV["HARVEST_ACCOUNT_ID"])
     end
   end
 end

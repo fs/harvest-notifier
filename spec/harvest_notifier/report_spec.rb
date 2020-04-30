@@ -7,12 +7,11 @@ describe HarvestNotifier::Report do
 
   before do
     allow(harvest).to receive(:users_list) { harvest_users }
+    allow(harvest).to receive(:time_report_list).with(from) { harvest_daily_time_report }
   end
 
   describe "#daily" do
-    before do
-      allow(harvest).to receive(:time_report_list).with(from) { harvest_daily_time_report }
-    end
+    let(:from) { Date.new(2020, 4, 15) }
 
     let(:harvest_users) do
       {
@@ -42,11 +41,12 @@ describe HarvestNotifier::Report do
 
     let(:expected_resutls) do
       [
-        { "email" => "bill.doe@example.com" }
+        {
+          "id" => 345,
+          "email" => "bill.doe@example.com"
+        }
       ]
     end
-
-    let(:from) { Date.new(2020, 4, 15) }
 
     it "returns daily report data" do
       Timecop.freeze(Time.local(2020, 4, 16)) do

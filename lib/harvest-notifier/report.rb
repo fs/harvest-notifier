@@ -4,7 +4,7 @@ require "active_support/core_ext/module/delegation"
 
 module HarvestNotifier
   class Report
-    attr_reader :from, :to, :harvest_client
+    attr_reader :harvest_client
 
     delegate :users_list, :time_report_list, to: :harvest_client, prefix: :harvest
 
@@ -13,44 +13,35 @@ module HarvestNotifier
     end
 
     def daily
-      @from = Date.yesterday
+      reports = prepare_reports(harvest_time_report_list(Date.yesterday))
 
-      users = daily_filter_users
-
-      users.map do |u|
-        {
-          "email" => u["email"]
-        }
+      users.reject do |user|
+        whitelisted_user?(user) || time_reported?(reports, user)
       end
     end
 
-    def weekly
-      # @from = Date.today.last_week
-      # @to = @from + 4.days
-      # users = weekly_filter_users
-
-      # users.map do |u|
-      #   {
-      #     email: u[:email],
-      #     missing_hours: u[:missing_hours]
-      #   }
-      # end
-    end
+    def weekly; end
 
     private
 
-    def daily_filter_users
-      harvest_users_list["users"].reject do |user|
-        time_report_user_ids.include?(user["id"]) || emails_whitelist.include?(user["email"])
-      end
-    end
-
-    def time_report_user_ids
-      @time_report_user_ids ||= harvest_time_report_list(from)["results"].map { |r| r["user_id"] }
-    end
-
     def emails_whitelist
-      ENV["EMAILS_WHITELIST"].split(",").map(&:strip)
+      @emails_whitelist ||= ENV["EMAILS_WHITELIST"].split(",").map(&:strip)
+    end
+
+    def whitelisted_user?(user)
+      emails_whitelist.include?(user["email"])
+    end
+
+    def prepare_reports(reports)
+      reports["results"].map { |r| r["user_id"] }
+    end
+
+    def time_reported?(reports, user)
+      reports.include?(user["id"])
+    end
+
+    def users
+      @users ||= harvest_users_list["users"].map { |u| u.slice("id", "email") }
     end
   end
 end

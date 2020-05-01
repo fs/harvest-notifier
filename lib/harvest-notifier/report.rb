@@ -28,13 +28,12 @@ module HarvestNotifier
 
     def weekly
       raw_reports = harvest_time_report_list(Date.today.last_week, Date.today.last_week + 4)
-
       reports = prepare_weekly_reports(raw_reports)
 
       result_users = calculate_hours(users, reports)
 
       result_users.reject! do |user|
-        whitelisted_user?(user) || user["missing_hours"] <= ENV["WEEKLY_REPORT_HOURS"].to_f
+        whitelisted_user?(user) || user["missing_hours"] <= ENV.fetch("WEEKLY_REPORT_HOURS", 1.0).to_f
       end
     end
 

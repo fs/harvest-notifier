@@ -3,7 +3,11 @@
 require "active_support/core_ext/date/calculations"
 
 require "harvest-notifier/report"
+require "harvest-notifier/slack_sender"
 require "harvest-notifier/harvest"
+require "harvest-notifier/templates/daily"
+require "harvest-notifier/templates/weekly"
+require "harvest-notifier/slack"
 
 module HarvestNotifier
   class Base
@@ -12,13 +16,17 @@ module HarvestNotifier
     def create_daily_report
       return unless working_day?
 
-      Report.new(harvest_client).daily
+      report = Report.new(harvest_client).daily
+
+      SlackSender.new(slack_client, report, HarvestNotifier::Templates::Daily).notify
     end
 
     def create_weekly_report
       return unless Date.today.monday?
 
-      Report.new(harvest_client).weekly
+      report = Report.new(harvest_client).weekly
+
+      SlackSender.new(slack_client, report, HarvestNotifier::Templates::Weekly).notify
     end
 
     private
@@ -29,6 +37,10 @@ module HarvestNotifier
 
     def harvest_client
       Harvest.new(ENV.fetch("HARVEST_TOKEN"), ENV.fetch("HARVEST_ACCOUNT_ID"))
+    end
+
+    def slack_client
+      Slack.new(ENV.fetch("SLACK_TOKEN"))
     end
   end
 end

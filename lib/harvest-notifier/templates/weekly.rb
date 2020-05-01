@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "harvest-notifier/templates/base"
+
 module HarvestNotifier
   module Templates
     class Weekly < Base

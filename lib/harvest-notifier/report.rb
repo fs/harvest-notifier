@@ -1,85 +1,80 @@
 # frozen_string_literal: true
 
 require "active_support/core_ext/module/delegation"
+require "active_support/core_ext/hash/deep_merge"
 
 module HarvestNotifier
   class Report
-    attr_reader :harvest_client
+    attr_reader :harvest_client, :emails_whitelist, :missing_hours_threshold
 
     delegate :users_list, :time_report_list, to: :harvest_client, prefix: :harvest
 
     def initialize(harvest_client)
       @harvest_client = harvest_client
+
+      @emails_whitelist = ENV.fetch("EMAILS_WHITELIST", "").split(",").map(&:strip)
+      @missing_hours_threshold = ENV.fetch("MISSING_HOURS_THRESHOLD", 1.0).to_f
     end
 
     def daily
-      reports = prepare_daily_reports(harvest_time_report_list(Date.yesterday))
+      users = prepare_users(harvest_users_list)
+      reports = harvest_time_report_list(Date.yesterday)
 
-      users.reject! do |user|
-        whitelisted_user?(user) || time_reported?(reports, user)
-      end
-
-      users.map do |u|
-        {
-          "email" => u["email"]
-        }
+      prepare_users_with_reports(users, reports).reject do |_, user|
+        whitelisted_user?(user) || time_reported?(user)
       end
     end
 
     def weekly
-      raw_reports = harvest_time_report_list(Date.today.last_week, Date.today.last_week + 4)
-      reports = prepare_weekly_reports(raw_reports)
+      users = prepare_users(harvest_users_list)
+      reports = harvest_time_report_list(Date.today.last_week, Date.today.last_week + 4)
 
-      result_users = calculate_hours(users, reports)
-
-      result_users.reject! do |user|
-        whitelisted_user?(user) || user["missing_hours"] <= ENV.fetch("WEEKLY_REPORT_HOURS", 1.0).to_f
+      prepare_users_with_reports(users, reports).reject do |_, user|
+        whitelisted_user?(user) || weekly_time_reported?(user)
       end
     end
 
     private
 
-    def emails_whitelist
-      @emails_whitelist ||= ENV["EMAILS_WHITELIST"].split(",").map(&:strip)
+    def prepare_users(users)
+      users["users"]
+        .group_by { |u| u["id"] }
+        .transform_values { |u| prepared_user(u.first) }
+    end
+
+    def prepared_user(user)
+      hours = user["weekly_capacity"] / 3600
+
+      {
+        "weekly_capacity" => hours,
+        "missing_hours" => hours,
+        "total_hours" => 0
+      }
+    end
+
+    def prepare_users_with_reports(users, reports)
+      reports["results"].each.with_object(users) do |report, result|
+        id = report["user_id"]
+
+        result[id]["missing_hours"] -= report["total_hours"]
+        result[id]["total_hours"] += report["total_hours"]
+      end
     end
 
     def whitelisted_user?(user)
       emails_whitelist.include?(user["email"])
     end
 
-    def calculate_hours(users, reports)
-      users.map do |user|
-        report = reports.find { |r| r["user_id"] == user["id"] }
-
-        weekly_capacity = user["weekly_capacity"] / 3600
-        missing_hours = report.nil? ? weekly_capacity : missing_hours(weekly_capacity, report["total_hours"])
-
-        {
-          "email" => user["email"],
-          "weekly_capacity" => weekly_capacity,
-          "missing_hours" => missing_hours
-        }
-      end
+    def time_reported?(user)
+      user["total_hours"].positive?
     end
 
-    def missing_hours(weekly_capacity, reported_hours)
-      weekly_capacity - reported_hours
+    def weekly_time_reported?(user)
+      time_reported?(user) && missing_hours_insignificant?(user)
     end
 
-    def prepare_weekly_reports(reports)
-      reports["results"].map { |r| r.slice("user_id", "total_hours") }
-    end
-
-    def prepare_daily_reports(reports)
-      reports["results"].map { |r| r["user_id"] }
-    end
-
-    def time_reported?(reports, user)
-      reports.include?(user["id"])
-    end
-
-    def users
-      @users ||= harvest_users_list["users"].map { |u| u.slice("id", "email", "weekly_capacity") }
+    def missing_hours_insignificant?(user)
+      user["missing_hours"] <= missing_hours_threshold
     end
   end
 end

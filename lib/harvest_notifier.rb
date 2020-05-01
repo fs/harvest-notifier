@@ -4,20 +4,16 @@ require "byebug"
 require "dotenv/load"
 
 require "harvest-notifier/rollbar"
-require "harvest-notifier/slack"
-require "harvest-notifier/slack_sender"
-require "harvest-notifier/templates/daily"
-require "harvest-notifier/templates/weekly"
+require "harvest-notifier/base"
 
 module HarvestNotifier
-  class Base
-    def create_daily_report
-      # weekly_users_data = [{email: "vadim.kurnatovskiy@flatstack.com", missing_hours: 4},
-      #              {email: "example@flatstack.com", missing_hours: 8}]
+  module_function
 
-      users_data = [{ email: "vadim.kurnatovskiy@flatstack.com" }, { email: "example@flatstack.com" }]
+  def create_daily_report
+    HarvestNotifier::Base.new.create_daily_report
+  end
 
-      SlackSender.new(users_data, HarvestNotifier::Templates::Daily).notify
-    end
+  def create_weekly_report
+    HarvestNotifier::Base.new.create_weekly_report
   end
 end

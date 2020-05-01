@@ -1,0 +1,18 @@
+[
+  {
+    "id": "U01TEST",
+    "email": "john.smith@example.com"
+  },
+  {
+    "id": "U02TEST",
+    "email": "bill.doe@example.com"
+  },
+  {
+    "id": "U03TEST",
+    "email": "emma.johnson@example.com"
+  },
+  {
+    "id": "U04TEST",
+    "email": "mia.williams@example.com"
+  }
+]

@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require "webmock/rspec"
 require "timecop"
 require "byebug"
 require "dotenv"
+
+require "harvest_notifier"
 
 Dotenv.load(".env.example")
 
@@ -13,6 +16,8 @@ module Helpers
 end
 
 RSpec.configure do |config|
+  config.include(Helpers)
+
   config.expect_with :rspec do |expectations|
     expectations.syntax = :expect
   end

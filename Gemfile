@@ -4,6 +4,7 @@ source "https://rubygems.org"
 
 ruby "2.6.5"
 
+gem "activesupport"
 gem "dotenv"
 gem "httparty"
 gem "jbuilder"
@@ -18,4 +19,5 @@ group :development do
   gem "rubocop"
   gem "rubocop-rspec", require: false
   gem "timecop"
+  gem "webmock"
 end

@@ -50,7 +50,7 @@ module HarvestNotifier
 
     def calculate_hours(users, reports)
       users.map do |user|
-        report = reports.find { |report| report["user_id"] == user["id"] }
+        report = reports.find { |r| r["user_id"] == user["id"] }
 
         weekly_capacity = user["weekly_capacity"] / 3600
         missing_hours = report.nil? ? weekly_capacity : missing_hours(weekly_capacity, report["total_hours"])

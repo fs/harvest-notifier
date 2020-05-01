@@ -16,7 +16,7 @@ module HarvestNotifier
     end
 
     def create_weekly_report
-      return unless Date.today.monday?
+      # return unless Date.today.monday?
 
       Report.new(harvest_client).weekly
     end

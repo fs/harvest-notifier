@@ -20,25 +20,29 @@ module HarvestNotifier
       users = prepare_users(harvest_users_list)
       reports = harvest_time_report_list(Date.yesterday)
 
-      prepare_users_with_reports(users, reports).reject do |_, user|
-        whitelisted_user?(user) || time_reported?(user)
+      results = prepare_users_with_reports(users, reports).reject do |email, user|
+        whitelisted_email?(email) || time_reported?(user)
       end
+
+      results.select { |_, v| v.clear } # results.keys
     end
 
     def weekly
       users = prepare_users(harvest_users_list)
       reports = harvest_time_report_list(Date.today.last_week, Date.today.last_week + 4)
 
-      prepare_users_with_reports(users, reports).reject do |_, user|
-        whitelisted_user?(user) || weekly_time_reported?(user)
+      results = prepare_users_with_reports(users, reports).reject do |email, user|
+        whitelisted_email?(email) || full_time_reported?(user)
       end
+
+      results.select { |_, v| v.slice!("missing_hours", "weekly_capacity") }
     end
 
     private
 
     def prepare_users(users)
       users["users"]
-        .group_by { |u| u["id"] }
+        .group_by { |u| u["email"] }
         .transform_values { |u| prepared_user(u.first) }
     end
 
@@ -46,6 +50,7 @@ module HarvestNotifier
       hours = user["weekly_capacity"] / 3600
 
       {
+        "id" => user["id"],
         "weekly_capacity" => hours,
         "missing_hours" => hours,
         "total_hours" => 0
@@ -53,23 +58,24 @@ module HarvestNotifier
     end
 
     def prepare_users_with_reports(users, reports)
-      reports["results"].each.with_object(users) do |report, result|
+      reports["results"].each.with_object(users) do |report, user|
         id = report["user_id"]
+        email = user.find { |r| r[1]["id"] == id }[0]
 
-        result[id]["missing_hours"] -= report["total_hours"]
-        result[id]["total_hours"] += report["total_hours"]
+        user[email]["missing_hours"] -= report["total_hours"]
+        user[email]["total_hours"] += report["total_hours"]
       end
     end
 
-    def whitelisted_user?(user)
-      emails_whitelist.include?(user["email"])
+    def whitelisted_email?(email)
+      emails_whitelist.include?(email)
     end
 
     def time_reported?(user)
       user["total_hours"].positive?
     end
 
-    def weekly_time_reported?(user)
+    def full_time_reported?(user)
       time_reported?(user) && missing_hours_insignificant?(user)
     end
 

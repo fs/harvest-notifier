@@ -9,7 +9,7 @@ module HarvestNotifier
     class Daily < Base
       DEFAULT_TEXT = "Ребята, не забывайте отмечать часы в Harvest каждый день."
       ALL_LOGGING = "Ура, все отметили часы за %s!"
-      LIST_OF_USERS = "Вот список людей, кто не отправил часы за %s: %s"
+      LIST_OF_USERS = "Вот список людей, кто не отправил часы за предыдущий день: %s"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json|
@@ -24,7 +24,7 @@ module HarvestNotifier
                 json.child! do
                   json.type "button"
                   json.text "Go to Harvest"
-                  json.url "https://flatstack.harvestapp.com/time/week/"
+                  json.url "https://flatstack.harvestapp.com/time/"
                   json.style "primary"
                 end
               end
@@ -36,23 +36,19 @@ module HarvestNotifier
       private
 
       def attachment_text
-        if users_data.empty?
-          format(ALL_LOGGING, current_date)
+        if users.empty?
+          format(ALL_LOGGING)
         else
-          format(LIST_OF_USERS, current_date, mention_users)
+          format(LIST_OF_USERS, mention_users)
         end
-      end
-
-      def current_date
-        Date.yesterday.strftime("%d %B %Y")
       end
 
       def mention_users
-        ids = users_data.map do |user|
-          user[:id] ? "<@#{user[:id]}>" : user[:email]
+        mention_users = users.map do |user|
+          user["id"] ? "<@#{user['id']}>" : user["email"]
         end
 
-        ids.join(", ")
+        mention_users.join(", ")
       end
 
       def channel

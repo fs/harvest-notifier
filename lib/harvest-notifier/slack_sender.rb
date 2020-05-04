@@ -22,23 +22,18 @@ module HarvestNotifier
 
     def prepared_users
       users.map do |user|
-        slack_user = slack_users.find { |u| u["email"] == user["email"] }
+        slack_user = slack_users.find { |u| u["profile"]["email"] == user["email"] }
 
-        user["slack_id"] = slack_user["id"]
+        user["id"] = slack_user["id"]
       end
 
       users
     end
 
     def slack_users
-      @slack_users ||= slack_users_list["members"].map do |u|
-        next if u["deleted"] || u["is_bot"]
-
-        {
-          "id" => u["id"],
-          "email" => u["profile"]["email"]
-        }
-      end.compact
+      @slack_users ||= slack_users_list["members"].reject do |u|
+        u["deleted"] || u["is_bot"]
+      end
     end
 
     def generate_from_template

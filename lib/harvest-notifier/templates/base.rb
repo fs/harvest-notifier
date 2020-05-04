@@ -3,14 +3,14 @@
 module HarvestNotifier
   module Templates
     class Base
-      attr_reader :users_data
+      attr_reader :users
 
-      def self.generate(users_data:)
-        new(users_data).generate
+      def self.generate(users:)
+        new(users).generate
       end
 
-      def initialize(users_data)
-        @users_data = users_data
+      def initialize(users)
+        @users = users
       end
     end
   end

@@ -5,6 +5,8 @@ describe HarvestNotifier::Base do
 
   let(:report_double) { instance_double(HarvestNotifier::Report) }
   let(:harvest_double) { instance_double(HarvestNotifier::Harvest) }
+  let(:slack_double) { instance_double(HarvestNotifier::Slack) }
+  let(:slack_sender_double) { instance_double(HarvestNotifier::SlackSender) }
 
   let(:users_data) do
     [
@@ -14,16 +16,23 @@ describe HarvestNotifier::Base do
 
   before do
     allow(HarvestNotifier::Harvest).to receive(:new) { harvest_double }
+    allow(HarvestNotifier::Slack).to receive(:new) { slack_double }
     allow(HarvestNotifier::Report).to receive(:new).with(harvest_double) { report_double }
+    allow(HarvestNotifier::SlackSender)
+      .to receive(:new).with(slack_double, users_data, template) { slack_sender_double }
 
     allow(report_double).to receive(:daily) { users_data }
     allow(report_double).to receive(:weekly) { users_data }
+    allow(slack_sender_double).to receive(:notify).and_return({ status: 200 })
   end
 
   describe "#create_daily_report" do
+    let(:template) { HarvestNotifier::Templates::Daily }
+
     it "creates daily notification" do
       Timecop.freeze(Time.local(2020, 4, 16)) do
         expect(report_double).to receive(:daily)
+        expect(slack_sender_double).to receive(:notify)
         base.create_daily_report
       end
     end
@@ -37,9 +46,12 @@ describe HarvestNotifier::Base do
   end
 
   describe "#create_weekly_report" do
+    let(:template) { HarvestNotifier::Templates::Weekly }
+
     it "creates weekly notification" do
       Timecop.freeze(Time.local(2020, 4, 13)) do
         expect(report_double).to receive(:weekly)
+        expect(slack_sender_double).to receive(:notify)
         base.create_weekly_report
       end
     end

@@ -20,18 +20,22 @@ module HarvestNotifier
       users = prepare_users(harvest_users_list)
       reports = harvest_time_report_list(Date.yesterday)
 
-      prepare_users_with_reports(users, reports).reject do |_, user|
-        whitelisted_user?(user) || time_reported?(user)
+      result = prepare_users_with_reports(users, reports).reject do |_, user|
+        whitelisted_email?(user["email"]) || time_reported?(user)
       end
+
+      result.values.map { |u| u.slice("email") }
     end
 
     def weekly
       users = prepare_users(harvest_users_list)
       reports = harvest_time_report_list(Date.today.last_week, Date.today.last_week + 4)
 
-      prepare_users_with_reports(users, reports).reject do |_, user|
-        whitelisted_user?(user) || weekly_time_reported?(user)
+      result = prepare_users_with_reports(users, reports).reject do |_, user|
+        whitelisted_email?(user["email"]) || full_time_reported?(user)
       end
+
+      result.values
     end
 
     private
@@ -46,6 +50,7 @@ module HarvestNotifier
       hours = user["weekly_capacity"] / 3600
 
       {
+        "email" => user["email"],
         "weekly_capacity" => hours,
         "missing_hours" => hours,
         "total_hours" => 0
@@ -61,15 +66,15 @@ module HarvestNotifier
       end
     end
 
-    def whitelisted_user?(user)
-      emails_whitelist.include?(user["email"])
+    def whitelisted_email?(email)
+      emails_whitelist.include?(email)
     end
 
     def time_reported?(user)
       user["total_hours"].positive?
     end
 
-    def weekly_time_reported?(user)
+    def full_time_reported?(user)
       time_reported?(user) && missing_hours_insignificant?(user)
     end
 

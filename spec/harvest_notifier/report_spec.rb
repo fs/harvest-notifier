@@ -49,11 +49,11 @@ describe HarvestNotifier::Report do
     end
 
     it "returns Bill Doe without time reports" do
-      expect(report.daily).to include(bill_doe["id"])
+      expect(report.daily).to include(include("email" => bill_doe["email"]))
     end
 
     it "does not return John Doe with time report" do
-      expect(report.daily).not_to include(john_doe["id"])
+      expect(report.daily).not_to include(include("email" => john_doe["email"]))
     end
   end
 
@@ -73,17 +73,28 @@ describe HarvestNotifier::Report do
       }
     end
 
+    let(:expected_results) do
+      [
+        {
+          "email" => "bill.doe@example.com",
+          "missing_hours" => 5.0,
+          "total_hours" => 35.0,
+          "weekly_capacity" => 40
+        }
+      ]
+    end
+
     around do |ex|
       Timecop.freeze(Time.local(2020, 4, 20)) { ex.run }
     end
 
     it "returns Bill Does with missing 5 hours" do
-      expect(report.weekly).to include(bill_doe["id"])
-      expect(report.weekly[bill_doe["id"]]).to include("missing_hours" => 5.0)
+      expect(report.weekly).to eq expected_results
+      expect(report.weekly).to include(include("missing_hours" => 5.0))
     end
 
     it "does not return John Doe with missing 1 hour b/c of threshold default 1.0 hour" do
-      expect(report.weekly).not_to include(john_doe["id"])
+      expect(report.weekly).not_to include(include("email" => john_doe["email"]))
     end
   end
 end

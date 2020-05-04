@@ -16,17 +16,17 @@ module HarvestNotifier
     def create_daily_report
       return unless working_day?
 
-      report = Report.new(harvest_client).daily
+      users = Report.new(harvest_client).daily
 
-      SlackSender.new(slack_client, report, HarvestNotifier::Templates::Daily).notify
+      SlackSender.new(slack_client, users, HarvestNotifier::Templates::Daily).notify
     end
 
     def create_weekly_report
       return unless Date.today.monday?
 
-      report = Report.new(harvest_client).weekly
+      users = Report.new(harvest_client).weekly
 
-      SlackSender.new(slack_client, report, HarvestNotifier::Templates::Weekly).notify
+      SlackSender.new(slack_client, users, HarvestNotifier::Templates::Weekly).notify
     end
 
     private

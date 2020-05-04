@@ -18,7 +18,7 @@ module HarvestNotifier
           json.fallback DEFAULT_TEXT
           json.attachments do
             json.child! do
-              json.text text
+              json.text attachment_text
               json.color "#7CD197"
               json.actions do
                 json.child! do
@@ -35,7 +35,7 @@ module HarvestNotifier
 
       private
 
-      def text
+      def attachment_text
         if users_data.empty?
           format(ALL_LOGGING, current_date)
         else

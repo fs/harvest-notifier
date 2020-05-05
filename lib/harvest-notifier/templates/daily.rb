@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "active_support/core_ext/date/calculations"
-require "jbuilder"
 require "harvest-notifier/templates/base"
 
 module HarvestNotifier

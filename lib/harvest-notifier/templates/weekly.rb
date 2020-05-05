@@ -7,7 +7,7 @@ module HarvestNotifier
     class Weekly < Base
       ALL_LOGGING = "Hooray, everyone reported the working hours for the previous week!"
       LIST_OF_USERS = "Here is a list of people who didn't report the working hours for the previous week: %s"
-      USER_REPORT = "%s did not send %s* hours out of %s hours"
+      USER_REPORT = "%s didn't send %s* hours out of %s hours"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength

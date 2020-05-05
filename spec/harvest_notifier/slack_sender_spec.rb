@@ -88,25 +88,43 @@ describe HarvestNotifier::SlackSender do
       let(:body) do
         "{
           \"channel\":\"test\",
-          \"text\":\"Ребята, не забывайте отмечать часы в Harvest каждый день.\",
-          \"fallback\":\"Ребята, не забывайте отмечать часы в Harvest каждый день.\",
-          \"attachments\":
+          \"blocks\":
           [
             {
-              \"text\":\"Вот список людей, кто не отправил часы за предыдущий день: <@U02TEST>\",
-              \"color\":\"#7CD197\",
-              \"actions\":
-              [
-                {
-                  \"type\":
-                  \"button\",
-                  \"text\":\"Go to Harvest\",
-                  \"url\":\"https://flatstack.harvestapp.com/time/\",
-                  \"style\":\"primary\"
-                }
-              ]
+              \"type\":\"section\",
+              \"text\":
+              {
+                \"type\":\"mrkdwn\",
+                \"text\":\"Guys, don't forget to report the working hours in Harvest every day.\"
+              }
+            },
+            {
+              \"type\":\"section\",
+              \"text\":
+              {
+                \"type\":\"button\",
+                \"text\":\"Go to Harvest\",
+                \"url\":\"https://flatstack.harvestapp.com/time/\",
+                \"style\":\"primary\"
+              }
             }
-          ]
+          ],
+          \"fallback\":\"Guys, don't forget to report the working hours in Harvest every day.\",
+          \"attachments\":
+          {
+            \"blocks\":
+            [
+              {
+                \"type\":\"section\",
+                \"color\":\"#7CD197\",
+                \"text\":
+                {
+                  \"type\":\"mrkdwn\",
+                  \"text\":\"<@U02TEST> didn't send 5.0* hours out of 40.0 hours\"
+                }
+              }
+            ]
+          }
         }"
       end
 

@@ -32,7 +32,7 @@ describe HarvestNotifier::Templates::Weekly do
 
       it "generates template with mentioning users" do
         expect(weekly)
-          .to include("<@U02TEST> did not send 2.0* hours out of 40.0 hours")
+          .to include("<@U02TEST> didn't send 2.0* hours out of 40.0 hours")
       end
     end
   end

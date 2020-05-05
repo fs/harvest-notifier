@@ -5,9 +5,9 @@ require "active_support/core_ext/date/calculations"
 require "harvest-notifier/report"
 require "harvest-notifier/slack_sender"
 require "harvest-notifier/harvest"
+require "harvest-notifier/slack"
 require "harvest-notifier/templates/daily"
 require "harvest-notifier/templates/weekly"
-require "harvest-notifier/slack"
 
 module HarvestNotifier
   class Base

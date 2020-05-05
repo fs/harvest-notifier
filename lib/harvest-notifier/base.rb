@@ -18,7 +18,7 @@ module HarvestNotifier
 
       users = Report.new(harvest_client).daily
 
-      Notification.new(slack_client, users, HarvestNotifier::Templates::Daily).notify
+      Notification.new(slack_client, users, HarvestNotifier::Templates::Daily).deliver
     end
 
     def create_weekly_report
@@ -26,7 +26,7 @@ module HarvestNotifier
 
       users = Report.new(harvest_client).weekly
 
-      Notification.new(slack_client, users, HarvestNotifier::Templates::Weekly).notify
+      Notification.new(slack_client, users, HarvestNotifier::Templates::Weekly).deliver
     end
 
     private

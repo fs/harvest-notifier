@@ -23,7 +23,7 @@ describe HarvestNotifier::Base do
 
     allow(report_double).to receive(:daily) { users_data }
     allow(report_double).to receive(:weekly) { users_data }
-    allow(notification_double).to receive(:notify).and_return({ status: 200 })
+    allow(notification_double).to receive(:deliver).and_return({ status: 200 })
   end
 
   describe "#create_daily_report" do
@@ -32,7 +32,7 @@ describe HarvestNotifier::Base do
     it "creates daily notification" do
       Timecop.freeze(Time.local(2020, 4, 16)) do
         expect(report_double).to receive(:daily)
-        expect(notification_double).to receive(:notify)
+        expect(notification_double).to receive(:deliver)
         base.create_daily_report
       end
     end
@@ -51,7 +51,7 @@ describe HarvestNotifier::Base do
     it "creates weekly notification" do
       Timecop.freeze(Time.local(2020, 4, 13)) do
         expect(report_double).to receive(:weekly)
-        expect(notification_double).to receive(:notify)
+        expect(notification_double).to receive(:deliver)
         base.create_weekly_report
       end
     end

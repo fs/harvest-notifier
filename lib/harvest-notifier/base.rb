@@ -3,7 +3,7 @@
 require "active_support/core_ext/date/calculations"
 
 require "harvest-notifier/report"
-require "harvest-notifier/slack_sender"
+require "harvest-notifier/notification"
 require "harvest-notifier/harvest"
 require "harvest-notifier/slack"
 require "harvest-notifier/templates/daily"
@@ -18,7 +18,7 @@ module HarvestNotifier
 
       users = Report.new(harvest_client).daily
 
-      SlackSender.new(slack_client, users, HarvestNotifier::Templates::Daily).notify
+      Notification.new(slack_client, users, HarvestNotifier::Templates::Daily).notify
     end
 
     def create_weekly_report
@@ -26,7 +26,7 @@ module HarvestNotifier
 
       users = Report.new(harvest_client).weekly
 
-      SlackSender.new(slack_client, users, HarvestNotifier::Templates::Weekly).notify
+      Notification.new(slack_client, users, HarvestNotifier::Templates::Weekly).notify
     end
 
     private

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe HarvestNotifier::Notification do
-  subject(:notification) { described_class.new(slack_double, assigns) }
+  subject(:notification) { described_class.new(slack_double) }
 
   let(:slack_double) { instance_double(HarvestNotifier::Slack) }
 
@@ -18,12 +18,12 @@ describe HarvestNotifier::Notification do
   describe "#deliver(template_name)" do
     it "generates notification text by template_name" do
       expect(template).to receive(:generate).with(assigns)
-      notification.deliver(template_name)
+      notification.deliver(template_name, assigns)
     end
 
     it "sends message to Slack" do
       expect(slack_double).to receive(:post_message).with(template_body)
-      notification.deliver(template_name)
+      notification.deliver(template_name, assigns)
     end
   end
 end

@@ -9,16 +9,15 @@ require "harvest-notifier/templates/congratulation"
 
 module HarvestNotifier
   class Notification
-    attr_reader :slack_client, :assigns
+    attr_reader :slack_client
 
     delegate :post_message, to: :slack_client, prefix: :slack
 
-    def initialize(slack_client, assigns)
+    def initialize(slack_client)
       @slack_client = slack_client
-      @assigns = assigns
     end
 
-    def deliver(template_name)
+    def deliver(template_name, assigns = {})
       slack_post_message(template_klass(template_name).generate(assigns))
     end
 

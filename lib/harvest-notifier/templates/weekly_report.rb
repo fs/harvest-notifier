@@ -40,7 +40,8 @@ module HarvestNotifier
                 json.color "#7CD197"
                 json.text do
                   json.type "mrkdwn"
-                  json.text "#{user["email"]} didn't send #{user["missing_hours"]}* hours out of #{user["weekly_capacity"]} hours"
+                  json.text "#{user['email']} didn't send #{user['missing_hours']}* hours \
+                    out of #{user['weekly_capacity']} hours"
                 end
               end
             end

@@ -11,29 +11,37 @@ module HarvestNotifier
   class Base
     DAILY_REPORT = %w[Tuesday Wednesday Thursday Friday].freeze
 
+    attr_reader :harvest_client, :slack_client, :notification, :report
+
+    def initialize
+      @harvest_client = Harvest.new(ENV.fetch("HARVEST_TOKEN"), ENV.fetch("HARVEST_ACCOUNT_ID"))
+      @slack_client = Slack.new(ENV.fetch("SLACK_TOKEN"))
+
+      @notification = Notification.new(slack_client)
+      @report = Report.new(harvest_client)
+    end
+
     def create_daily_report
       return unless working_day?
 
-      users = Report.new(harvest_client).daily
-      notification = Notification.new(slack_client, users: users)
+      users = report.daily
 
       if users.empty?
         notification.deliver(:congratulation)
       else
-        notification.deliver(:daily_report)
+        notification.deliver(:daily_report, users: users)
       end
     end
 
     def create_weekly_report
       return unless Date.today.monday?
 
-      users = Report.new(harvest_client).weekly
-      notification = Notification.new(slack_client, users: users)
+      users = report.weekly
 
       if users.empty?
         notification.deliver(:congratulation)
       else
-        notification.deliver(:weekly_report)
+        notification.deliver(:weekly_report, users: users)
       end
     end
 
@@ -41,14 +49,6 @@ module HarvestNotifier
 
     def working_day?
       DAILY_REPORT.include?(Date.today.strftime("%A"))
-    end
-
-    def harvest_client
-      Harvest.new(ENV.fetch("HARVEST_TOKEN"), ENV.fetch("HARVEST_ACCOUNT_ID"))
-    end
-
-    def slack_client
-      Slack.new(ENV.fetch("SLACK_TOKEN"))
     end
   end
 end

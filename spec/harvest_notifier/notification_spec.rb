@@ -7,8 +7,8 @@ describe HarvestNotifier::Notification do
 
   let(:template) { HarvestNotifier::Templates::Base }
   let(:template_name) { :base }
-  let(:assigns) { { users: [ { "email": "john.doe@example.com" } ] } }
-  let(:template_body  ) { "Hello!" }
+  let(:assigns) { { users: [{ "email": "john.doe@example.com" }] } }
+  let(:template_body) { "Hello!" }
 
   before do
     allow(template).to receive(:generate).with(assigns) { template_body }

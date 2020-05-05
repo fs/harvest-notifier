@@ -5,7 +5,7 @@ require "harvest-notifier/templates/base"
 module HarvestNotifier
   module Templates
     class Congratulation < Base
-      def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def generate # rubocop:disable Metrics/MethodLength
         Jbuilder.encode do |json|
           json.channel channel
           json.attachments do

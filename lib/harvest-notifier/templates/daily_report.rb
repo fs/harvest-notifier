@@ -33,7 +33,7 @@ module HarvestNotifier
       private
 
       def text
-        format(LIST_OF_USERS, assigns[:users].map { |u| u["email"] }.join(", ") )
+        format(LIST_OF_USERS, assigns[:users].map { |u| u["email"] }.join(", "))
       end
     end
   end

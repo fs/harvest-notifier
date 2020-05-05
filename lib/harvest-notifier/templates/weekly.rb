@@ -5,9 +5,8 @@ require "harvest-notifier/templates/base"
 module HarvestNotifier
   module Templates
     class Weekly < Base
-      DEFAULT_TEXT = "Ребята, не забывайте отмечать часы в Harvest каждый день."
-      ALL_LOGGING = "Ура, все отметили часы за предыдущую неделю!"
-      LIST_OF_USERS = "Вот список людей, кто не отправил часы за предыдущую неделю: %s"
+      ALL_LOGGING = "Hooray, everyone reported the working hours for the previous week!"
+      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for the previous week: %s"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json|

@@ -8,7 +8,7 @@ describe HarvestNotifier::Templates::Weekly do
       let(:users) { [] }
 
       it "generates template what all logging the hours" do
-        expect(weekly).to include("Ура, все отметили часы за предыдущую неделю!")
+        expect(weekly).to include("Hooray, everyone reported the working hours for the previous week!")
       end
     end
 
@@ -16,7 +16,8 @@ describe HarvestNotifier::Templates::Weekly do
       let(:users) { [{ "email" => "bill.doe@example.com", "id" => "U02TEST" }] }
 
       it "generates template with mentioning users" do
-        expect(weekly).to include("Вот список людей, кто не отправил часы за предыдущую неделю: <@U02TEST>")
+        expect(weekly)
+          .to include("Here is a list of people who didn't report the working hours for the previous week: <@U02TEST>")
       end
     end
   end

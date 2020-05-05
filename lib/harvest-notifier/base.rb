@@ -6,8 +6,6 @@ require "harvest-notifier/report"
 require "harvest-notifier/notification"
 require "harvest-notifier/harvest"
 require "harvest-notifier/slack"
-require "harvest-notifier/templates/daily"
-require "harvest-notifier/templates/weekly"
 
 module HarvestNotifier
   class Base
@@ -17,16 +15,26 @@ module HarvestNotifier
       return unless working_day?
 
       users = Report.new(harvest_client).daily
+      notification = Notification.new(slack_client, users: users)
 
-      Notification.new(slack_client, users, HarvestNotifier::Templates::Daily).deliver
+      if users.empty?
+        notification.deliver(:congratulation)
+      else
+        notification.deliver(:daily_report)
+      end
     end
 
     def create_weekly_report
       return unless Date.today.monday?
 
       users = Report.new(harvest_client).weekly
+      notification = Notification.new(slack_client, users: users)
 
-      Notification.new(slack_client, users, HarvestNotifier::Templates::Weekly).deliver
+      if users.empty?
+        notification.deliver(:congratulation)
+      else
+        notification.deliver(:weekly_report)
+      end
     end
 
     private

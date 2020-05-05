@@ -4,18 +4,18 @@ require "harvest-notifier/templates/base"
 
 module HarvestNotifier
   module Templates
-    class Daily < Base
-      ALL_LOGGING = "Hooray, everyone reported the working hours for the previous day!"
+    class DailyReport < Base
+      REMINDER_TEXT = "Guys, don't forget to report the working hours in Harvest every day."
       LIST_OF_USERS = "Here is a list of people who didn't report the working hours for the previous day: %s"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json|
           json.channel channel
-          json.text DEFAULT_TEXT
-          json.fallback DEFAULT_TEXT
+          json.text REMINDER_TEXT
+          json.fallback REMINDER_TEXT
           json.attachments do
             json.child! do
-              json.text attachment_text
+              json.text text
               json.color "#7CD197"
               json.actions do
                 json.child! do
@@ -32,24 +32,8 @@ module HarvestNotifier
 
       private
 
-      def attachment_text
-        if users.empty?
-          format(ALL_LOGGING)
-        else
-          format(LIST_OF_USERS, mention_users)
-        end
-      end
-
-      def mention_users
-        mention_users = users.map do |user|
-          user["id"] ? "<@#{user['id']}>" : user["email"]
-        end
-
-        mention_users.join(", ")
-      end
-
-      def channel
-        ENV.fetch("SLACK_CHANNEL", "general")
+      def text
+        format(LIST_OF_USERS, assigns[:users].map { |u| u["email"] }.join(", ") )
       end
     end
   end

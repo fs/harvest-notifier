@@ -5,17 +5,18 @@ require "jbuilder"
 module HarvestNotifier
   module Templates
     class Base
-      DEFAULT_TEXT = "Guys, don't forget to report the working hours in Harvest every day."
+      attr_reader :assigns, :channel
 
-      attr_reader :users
-
-      def self.generate(users:)
-        new(users).generate
+      def self.generate(assigns = {})
+        new(assigns).generate
       end
 
-      def initialize(users)
-        @users = users
+      def initialize(assigns)
+        @channel = ENV.fetch("SLACK_CHANNEL", "general")
+        @assigns = assigns
       end
+
+      def generate(assigns = {}); end
     end
   end
 end

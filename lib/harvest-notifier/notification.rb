@@ -1,45 +1,31 @@
 # frozen_string_literal: true
 
 require "active_support/core_ext/module/delegation"
+require "active_support/core_ext/string/inflections"
+
+require "harvest-notifier/templates/daily_report"
+require "harvest-notifier/templates/weekly_report"
+require "harvest-notifier/templates/congratulation"
 
 module HarvestNotifier
   class Notification
-    attr_reader :slack_client, :users, :template
+    attr_reader :slack_client, :assigns
 
-    delegate :post_message, :users_list, to: :slack_client, prefix: :slack
+    delegate :post_message, to: :slack_client, prefix: :slack
 
-    def initialize(slack_client, users, template)
+    def initialize(slack_client, assigns)
       @slack_client = slack_client
-      @users = users
-      @template = template
+      @assigns = assigns
     end
 
-    def deliver
-      slack_post_message(generate_from_template)
+    def deliver(template_name)
+      slack_post_message(template_klass(template_name).generate(assigns))
     end
 
     private
 
-    def prepared_users
-      return if users.empty?
-
-      users.map do |user|
-        slack_user = slack_users.find { |u| u["profile"]["email"] == user["email"] }
-
-        user["id"] = slack_user["id"]
-      end
-
-      users
-    end
-
-    def slack_users
-      @slack_users ||= slack_users_list["members"].reject do |u|
-        u["deleted"] || u["is_bot"]
-      end
-    end
-
-    def generate_from_template
-      template.generate(users: prepared_users)
+    def template_klass(template_name)
+      "HarvestNotifier::Templates::#{template_name.to_s.classify}".constantize
     end
   end
 end

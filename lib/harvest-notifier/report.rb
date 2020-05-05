@@ -35,12 +35,6 @@ module HarvestNotifier
 
     private
 
-    def filter_users_with_reports(users, reports)
-      prepare_users_with_reports(users, reports)
-        .reject { |_id, user| yield(user) }
-        .values
-    end
-
     def prepare_users(users)
       users["users"]
         .group_by { |u| u["id"] }
@@ -56,6 +50,12 @@ module HarvestNotifier
         "missing_hours" => hours,
         "total_hours" => 0
       }
+    end
+
+    def filter_users_with_reports(users, reports)
+      prepare_users_with_reports(users, reports)
+        .reject { |_id, user| yield(user) }
+        .values
     end
 
     def prepare_users_with_reports(users, reports)

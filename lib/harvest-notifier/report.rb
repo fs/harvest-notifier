@@ -19,25 +19,27 @@ module HarvestNotifier
       users = prepare_users(harvest_users_list)
       reports = harvest_time_report_list(Date.yesterday)
 
-      result = prepare_users_with_reports(users, reports).reject do |_, user|
+      filter_users_with_reports(users, reports) do |user|
         whitelisted_email?(user["email"]) || time_reported?(user)
       end
-
-      result.values.map { |u| u.slice("email") }
     end
 
     def weekly
       users = prepare_users(harvest_users_list)
       reports = harvest_time_report_list(Date.today.last_week, Date.today.last_week + 4)
 
-      result = prepare_users_with_reports(users, reports).reject do |_, user|
+      filter_users_with_reports(users, reports) do |user|
         whitelisted_email?(user["email"]) || full_time_reported?(user)
       end
-
-      result.values
     end
 
     private
+
+    def filter_users_with_reports(users, reports)
+      prepare_users_with_reports(users, reports)
+        .reject { |_id, user| yield(user) }
+        .values
+    end
 
     def prepare_users(users)
       users["users"]

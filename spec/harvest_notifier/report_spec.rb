@@ -73,24 +73,16 @@ describe HarvestNotifier::Report do
       }
     end
 
-    let(:expected_results) do
-      [
-        {
-          "email" => "bill.doe@example.com",
-          "missing_hours" => 5.0,
-          "total_hours" => 35.0,
-          "weekly_capacity" => 40
-        }
-      ]
-    end
-
     around do |ex|
       Timecop.freeze(Time.local(2020, 4, 20)) { ex.run }
     end
 
+    it "returns array of users" do
+      expect(report.weekly).to be_a_kind_of(Array)
+    end
+
     it "returns Bill Does with missing 5 hours" do
-      expect(report.weekly).to eq expected_results
-      expect(report.weekly).to include(include("missing_hours" => 5.0))
+      expect(report.weekly).to include(include("email" => bill_doe["email"], "missing_hours" => 5.0))
     end
 
     it "does not return John Doe with missing 1 hour b/c of threshold default 1.0 hour" do

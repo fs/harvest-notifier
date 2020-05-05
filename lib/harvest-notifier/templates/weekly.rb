@@ -6,7 +6,7 @@ module HarvestNotifier
   module Templates
     class Weekly < Base
       DEFAULT_TEXT = "Ребята, не забывайте отмечать часы в Harvest каждый день."
-      ALL_LOGGING = "Ура, все отметили часы за %s!"
+      ALL_LOGGING = "Ура, все отметили часы за предыдущую неделю!"
       LIST_OF_USERS = "Вот список людей, кто не отправил часы за предыдущую неделю: %s"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -35,18 +35,18 @@ module HarvestNotifier
 
       def attachment_text
         if users.empty?
-          format(ALL_LOGGING, current_date)
+          format(ALL_LOGGING)
         else
-          format(LIST_OF_USERS, current_date, mention_users)
+          format(LIST_OF_USERS, mention_users)
         end
       end
 
       def mention_users
-        ids = users.map do |user|
+        mention_users = users.map do |user|
           user["id"] ? "<@#{user['id']}>" : user["email"]
         end
 
-        ids.join(", ")
+        mention_users.join(", ")
       end
 
       def channel

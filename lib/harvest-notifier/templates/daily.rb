@@ -8,7 +8,7 @@ module HarvestNotifier
   module Templates
     class Daily < Base
       DEFAULT_TEXT = "Ребята, не забывайте отмечать часы в Harvest каждый день."
-      ALL_LOGGING = "Ура, все отметили часы за %s!"
+      ALL_LOGGING = "Ура, все отметили часы за предыдущий день!"
       LIST_OF_USERS = "Вот список людей, кто не отправил часы за предыдущий день: %s"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength

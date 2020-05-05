@@ -21,6 +21,8 @@ module HarvestNotifier
     private
 
     def prepared_users
+      return if users.empty?
+
       users.map do |user|
         slack_user = slack_users.find { |u| u["profile"]["email"] == user["email"] }
 

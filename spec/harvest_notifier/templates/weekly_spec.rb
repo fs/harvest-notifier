@@ -13,11 +13,24 @@ describe HarvestNotifier::Templates::Weekly do
     end
 
     context "when some users didn't report the hours" do
-      let(:users) { [{ "email" => "bill.doe@example.com", "id" => "U02TEST" }] }
+      let(:users) do
+        [
+          { "email" => "bill.doe@example.com",
+            "id" => "U02TEST",
+            "missing_hours" => 2.0,
+            "weekly_capacity" => 40.0
+          },
+          { "email" => "john.smith@example.com",
+            "id" => "U01TEST",
+            "missing_hours" => 5.0,
+            "weekly_capacity" => 35.0
+          },
+        ]
+      end
 
       it "generates template with mentioning users" do
         expect(weekly)
-          .to include("Here is a list of people who didn't report the working hours for the previous week: <@U02TEST>")
+          .to include("<@U02TEST> did not send 2.0* hours out of 40.0 hours")
       end
     end
   end

@@ -49,11 +49,11 @@ describe HarvestNotifier::Report do
     end
 
     it "returns Bill Doe without time reports" do
-      expect(report.daily).to include(include("email" => bill_doe["email"]))
+      expect(report.daily).to include(include(email: bill_doe["email"]))
     end
 
     it "does not return John Doe with time report" do
-      expect(report.daily).not_to include(include("email" => john_doe["email"]))
+      expect(report.daily).not_to include(include(email: john_doe["email"]))
     end
   end
 
@@ -82,11 +82,11 @@ describe HarvestNotifier::Report do
     end
 
     it "returns Bill Does with missing 5 hours" do
-      expect(report.weekly).to include(include("email" => bill_doe["email"], "missing_hours" => 5.0))
+      expect(report.weekly).to include(include(email: bill_doe["email"], missing_hours: 5.0))
     end
 
     it "does not return John Doe with missing 1 hour b/c of threshold default 1.0 hour" do
-      expect(report.weekly).not_to include(include("email" => john_doe["email"]))
+      expect(report.weekly).not_to include(include(email: john_doe["email"]))
     end
   end
 end

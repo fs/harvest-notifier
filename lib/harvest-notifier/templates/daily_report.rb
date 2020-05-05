@@ -15,7 +15,7 @@ module HarvestNotifier
           json.fallback REMINDER_TEXT
           json.attachments do
             json.child! do
-              json.text text
+              json.text format(LIST_OF_USERS, emails)
               json.color "#7CD197"
               json.actions do
                 json.child! do
@@ -32,8 +32,8 @@ module HarvestNotifier
 
       private
 
-      def text
-        format(LIST_OF_USERS, assigns[:users].map { |u| u["email"] }.join(", "))
+      def emails
+        assigns[:users].map { |u| u[:email] }.join(", ")
       end
     end
   end

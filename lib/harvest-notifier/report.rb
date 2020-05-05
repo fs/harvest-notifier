@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "active_support/core_ext/module/delegation"
+require "active_support/core_ext/hash/keys"
 
 module HarvestNotifier
   class Report
@@ -56,6 +57,7 @@ module HarvestNotifier
       prepare_users_with_reports(users, reports)
         .reject { |_id, user| yield(user) }
         .values
+        .map(&:symbolize_keys)
     end
 
     def prepare_users_with_reports(users, reports)

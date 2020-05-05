@@ -6,8 +6,7 @@ module HarvestNotifier
   module Templates
     class WeeklyReport < Base
       REMINDER_TEXT = "Guys, don't forget to report the working hours in Harvest every day."
-      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for the previous week: %s"
-      USER_REPORT = "%s didn't send %s* hours out of %s hours"
+      USER_REPORT = "%<email>s didn't send %<missing_hours>s* hours out of %<weekly_capacity>s hours"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength
@@ -40,8 +39,7 @@ module HarvestNotifier
                 json.color "#7CD197"
                 json.text do
                   json.type "mrkdwn"
-                  json.text "#{user['email']} didn't send #{user['missing_hours']}* hours \
-                    out of #{user['weekly_capacity']} hours"
+                  json.text format(USER_REPORT, user)
                 end
               end
             end

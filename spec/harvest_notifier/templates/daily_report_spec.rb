@@ -4,7 +4,7 @@ describe HarvestNotifier::Templates::DailyReport do
   subject(:template) { described_class.generate(users: users) }
 
   describe "#generate" do
-    let(:users) { [{ "email" => "bill.doe@example.com", "id" => "U02TEST" }] }
+    let(:users) { [{ email: "bill.doe@example.com", id: "U02TEST" }] }
 
     it "generates template with mentioning users" do
       expect(template).to include("Here is a list of people")

@@ -16,7 +16,7 @@ module HarvestNotifier
         @assigns = assigns
       end
 
-      def generate(assigns = {}); end
+      def generate; end
     end
   end
 end

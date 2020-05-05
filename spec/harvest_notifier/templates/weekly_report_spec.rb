@@ -7,10 +7,10 @@ describe HarvestNotifier::Templates::WeeklyReport do
     let(:users) do
       [
         {
-          "email" => "bill.doe@example.com",
-          "id" => "U02TEST",
-          "missing_hours" => 2.0,
-          "weekly_capacity" => 40.0
+          email: "bill.doe@example.com",
+          id: "U02TEST",
+          missing_hours: 2.0,
+          weekly_capacity: 40.0
         }
       ]
     end

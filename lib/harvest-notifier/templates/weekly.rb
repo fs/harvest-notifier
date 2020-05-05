@@ -10,7 +10,7 @@ module HarvestNotifier
       USER_REPORT = "%s did not send %s* hours out of %s hours"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        Jbuilder.encode do |json|
+        Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength
           json.channel channel
           json.blocks do
             json.child! do

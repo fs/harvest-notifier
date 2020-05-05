@@ -15,16 +15,18 @@ describe HarvestNotifier::Templates::Weekly do
     context "when some users didn't report the hours" do
       let(:users) do
         [
-          { "email" => "bill.doe@example.com",
+          {
+            "email" => "bill.doe@example.com",
             "id" => "U02TEST",
             "missing_hours" => 2.0,
             "weekly_capacity" => 40.0
           },
-          { "email" => "john.smith@example.com",
+          {
+            "email" => "john.smith@example.com",
             "id" => "U01TEST",
             "missing_hours" => 5.0,
             "weekly_capacity" => 35.0
-          },
+          }
         ]
       end
 

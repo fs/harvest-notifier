@@ -20,7 +20,7 @@ module HarvestNotifier
       reports = harvest_time_report_list(Date.yesterday)
 
       filter_users_with_reports(users, reports) do |user|
-        whitelisted_email?(user["email"]) || time_reported?(user)
+        whitelisted_user?(user) || time_reported?(user)
       end
     end
 
@@ -29,7 +29,7 @@ module HarvestNotifier
       reports = harvest_time_report_list(Date.today.last_week, Date.today.last_week + 4)
 
       filter_users_with_reports(users, reports) do |user|
-        whitelisted_email?(user["email"]) || full_time_reported?(user)
+        whitelisted_user?(user) || full_time_reported?(user)
       end
     end
 
@@ -67,8 +67,8 @@ module HarvestNotifier
       end
     end
 
-    def whitelisted_email?(email)
-      emails_whitelist.include?(email)
+    def whitelisted_user?(user)
+      emails_whitelist.include?(user["email"])
     end
 
     def time_reported?(user)

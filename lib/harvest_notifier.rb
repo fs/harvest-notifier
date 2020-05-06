@@ -5,8 +5,6 @@ require "dotenv/load"
 
 require "harvest-notifier/rollbar"
 require "harvest-notifier/base"
-require "harvest-notifier/slack"
-require "harvest-notifier/harvest"
 
 module HarvestNotifier
   module_function

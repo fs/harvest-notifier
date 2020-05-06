@@ -51,3 +51,11 @@ blocks:
       - name: Specs
         commands:
           - bundle exec rspec
+
+promotions:
+  - name: Deploy to Heroku
+    pipeline_file: heroku.yml
+    auto_promote_on:
+      - result: passed
+        branch:
+          - master

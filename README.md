@@ -33,9 +33,10 @@ heroku config:set ROLLBAR_ENV=production
 heroku config:set SNITCH_DAILY=
 heroku config:set HARVEST_TOKEN=
 heroku config:set HARVEST_ACCOUNT_ID=
-heroku config:set SLACK_WEBHOOK_URL=http://rewards.team/api/v1
 heroku config:set SLACK_TOKEN=
-heroku config:set EMAIL_WHITELIST=
+heroku config:set SLACK_CHANNEL=
+heroku config:set EMAILS_WHITELIST=
+heroku config:set MISSING_HOURS_THRESHOLD=
 ```
 
 ## Quality tools

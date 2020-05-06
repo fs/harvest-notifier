@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "byebug"
-require "dotenv/load"
-
 require "harvest-notifier/rollbar"
 require "harvest-notifier/base"
 

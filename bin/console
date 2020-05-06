@@ -2,7 +2,6 @@
 
 $: << 'lib'
 require "bundler/setup"
-require "dotenv/load"
 require "byebug"
 require "harvest_notifier"
 

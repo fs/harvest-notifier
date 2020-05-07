@@ -29,7 +29,7 @@ describe HarvestNotifier::Base do
     it "creates daily notification" do
       Timecop.freeze(Time.local(2020, 4, 16)) do
         expect(report_double).to receive(:daily) { users_data }
-        expect(notification_double).to receive(:deliver).with(:daily_report, users: users_data)
+        expect(notification_double).to receive(:deliver).with(:daily_report, users: users_data, date: Date.yesterday)
 
         base.create_daily_report
       end

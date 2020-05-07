@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe HarvestNotifier::Templates::DailyReport do
-  subject(:template) { described_class.generate(users: users) }
+  subject(:template) { described_class.generate(users: users, date: Date.yesterday) }
 
   describe "#generate" do
     let(:users) { [{ email: "bill.doe@example.com", id: "U02TEST" }] }

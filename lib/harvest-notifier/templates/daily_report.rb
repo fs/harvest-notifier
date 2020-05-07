@@ -5,24 +5,58 @@ require "harvest-notifier/templates/base"
 module HarvestNotifier
   module Templates
     class DailyReport < Base
-      REMINDER_TEXT = "Guys, don't forget to report the working hours in Harvest every day."
-      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for the previous day: %s"
+      REMINDER_TEXT = "*Guys, don't forget to report the working hours in Harvest every day.*"
+      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for *%{current_date}*:"
+      REPORT_NOTICE = "_Please, report time and react with :heavy_check_mark: for this message._"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        Jbuilder.encode do |json|
+        Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength
           json.channel channel
-          json.text REMINDER_TEXT
-          json.fallback REMINDER_TEXT
-          json.attachments do
+          json.blocks do
+            # Reminder text
             json.child! do
-              json.text format(LIST_OF_USERS, emails)
-              json.color "#7CD197"
-              json.actions do
+              json.type "section"
+              json.text do
+                json.type "mrkdwn"
+                json.text REMINDER_TEXT
+              end
+            end
+            # Pretext list of users
+            json.child! do
+              json.type "section"
+              json.text do
+                json.type "mrkdwn"
+                json.text format(LIST_OF_USERS, current_date)
+              end
+            end
+            # List of users
+            json.child! do
+              json.type "section"
+              json.text do
+                json.type "mrkdwn"
+                json.text users_list
+              end
+            end
+            # Report notice
+            json.child! do
+              json.type "section"
+              json.text do
+                json.type "mrkdwn"
+                json.text REPORT_NOTICE
+              end
+            end
+            # Report Time button
+            json.child! do
+              json.type "actions"
+              json.elements do
                 json.child! do
                   json.type "button"
-                  json.text "Go to Harvest"
-                  json.url "https://flatstack.harvestapp.com/time/"
+                  json.url "https://flatstack.harvestapp.com/time"
                   json.style "primary"
+                  json.text do
+                    json.type "plain_text"
+                    json.text "Report Time"
+                  end
                 end
               end
             end
@@ -32,8 +66,12 @@ module HarvestNotifier
 
       private
 
-      def emails
-        assigns[:users].map { |u| u[:email] }.join(", ")
+      def current_date
+        { current_date: Date.yesterday.strftime("%B%eth") }
+      end
+
+      def users_list
+        assigns[:users].map { |u| u[:email] }.join(" \n • ").prepend("• ")
       end
     end
   end

@@ -5,7 +5,7 @@ require "jbuilder"
 module HarvestNotifier
   module Templates
     class Base
-      attr_reader :assigns, :channel
+      attr_reader :assigns, :channel, :url
 
       def self.generate(assigns = {})
         new(assigns).generate

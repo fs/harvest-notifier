@@ -51,7 +51,7 @@ module HarvestNotifier
               json.elements do
                 json.child! do
                   json.type "button"
-                  json.url "https://flatstack.harvestapp.com/time"
+                  json.url ENV.fetch("HARVEST_URL", "https://harvestapp.com/")
                   json.style "primary"
                   json.text do
                     json.type "plain_text"

@@ -26,7 +26,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text format(LIST_OF_USERS, current_date)
+                json.text format(LIST_OF_USERS, current_date: slack_formatting)
               end
             end
             # List of users
@@ -66,8 +66,8 @@ module HarvestNotifier
 
       private
 
-      def current_date
-        { current_date: Date.yesterday.strftime("%B%eth") }
+      def slack_formatting
+        "<!date^#{assigns[:date].to_time.to_i}^{date_short}th|yesterday>"
       end
 
       def users_list

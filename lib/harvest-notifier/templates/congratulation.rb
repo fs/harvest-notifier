@@ -16,7 +16,7 @@ module HarvestNotifier
                 json.child! do
                   json.type "button"
                   json.text "Go to Harvest"
-                  json.url ENV.fetch("HARVEST_URL", "https://harvestapp.com/")
+                  json.url url
                   json.style "primary"
                 end
               end

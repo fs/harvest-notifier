@@ -13,6 +13,8 @@ module HarvestNotifier
 
       def initialize(assigns)
         @channel = ENV.fetch("SLACK_CHANNEL", "general")
+        @url = ENV.fetch("HARVEST_URL", "https://harvestapp.com/")
+
         @assigns = assigns
       end
 

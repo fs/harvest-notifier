@@ -6,13 +6,13 @@ module HarvestNotifier
   module Templates
     class DailyReport < Base
       REMINDER_TEXT = "*Guys, don't forget to report the working hours in Harvest every day.*"
-      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for *%{current_date}*:"
+      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for *%<current_date>s*:"
       REPORT_NOTICE = "_Please, report time and react with :heavy_check_mark: for this message._"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength
           json.channel channel
-          json.blocks do
+          json.blocks do # rubocop:disable Metrics/BlockLength
             # Reminder text
             json.child! do
               json.type "section"

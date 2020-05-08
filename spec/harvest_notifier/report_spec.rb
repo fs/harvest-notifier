@@ -67,7 +67,7 @@ describe HarvestNotifier::Report do
           },
           {
             "user_id" => bill_doe["id"],
-            "total_hours" => 35.0
+            "total_hours" => 35.25
           }
         ]
       }
@@ -82,7 +82,7 @@ describe HarvestNotifier::Report do
     end
 
     it "returns Bill Does with missing 5 hours" do
-      expect(report.weekly).to include(include(email: bill_doe["email"], missing_hours: 5.0))
+      expect(report.weekly).to include(include(email: bill_doe["email"], missing_hours: 4.75))
     end
 
     it "does not return John Doe with missing 1 hour b/c of threshold default 1.0 hour" do

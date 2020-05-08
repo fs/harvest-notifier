@@ -5,14 +5,16 @@ require "harvest-notifier/templates/base"
 module HarvestNotifier
   module Templates
     class WeeklyReport < Base
-      REMINDER_TEXT = "Guys, don't forget to report the working hours in Harvest every day."
-      USER_REPORT = "%<email>s didn't send %<missing_hours>s* hours out of %<weekly_capacity>s hours"
+      REMINDER_TEXT = "*Guys, don't forget to report the working hours in Harvest every day.*"
+      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for *previous week*:"
+      USER_REPORT = "%<email>s: *%<missing_hours>s* hours of %<weekly_capacity>s"
+      REPORT_NOTICE = "_Please, report time and react with :heavy_check_mark: for this message._"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength
           json.channel channel
-
-          json.blocks do
+          json.blocks do # rubocop:disable Metrics/BlockLength
+            # Reminder text
             json.child! do
               json.type "section"
               json.text do
@@ -20,31 +22,53 @@ module HarvestNotifier
                 json.text REMINDER_TEXT
               end
             end
-
+            # Pretext list of users
             json.child! do
               json.type "section"
               json.text do
-                json.type "button"
-                json.text "Go to Harvest"
-                json.url url
-                json.style "primary"
+                json.type "mrkdwn"
+                json.text LIST_OF_USERS
               end
             end
-          end
-
-          json.attachments do
-            json.blocks do
-              json.array!(assigns[:users]) do |user|
-                json.type "section"
-                json.color "#7CD197"
-                json.text do
-                  json.type "mrkdwn"
-                  json.text format(USER_REPORT, user)
+            # List of users
+            json.child! do
+              json.type "section"
+              json.text do
+                json.type "mrkdwn"
+                json.text users_list
+              end
+            end
+            # Report notice
+            json.child! do
+              json.type "section"
+              json.text do
+                json.type "mrkdwn"
+                json.text REPORT_NOTICE
+              end
+            end
+            # Report Time button
+            json.child! do
+              json.type "actions"
+              json.elements do
+                json.child! do
+                  json.type "button"
+                  json.url url
+                  json.style "primary"
+                  json.text do
+                    json.type "plain_text"
+                    json.text "Report Time"
+                  end
                 end
               end
             end
           end
         end
+      end
+
+      private
+
+      def users_list
+        assigns[:users].map { |u| format(USER_REPORT, u) }.join(" \n • ").prepend("• ")
       end
     end
   end

@@ -16,7 +16,7 @@ describe HarvestNotifier::Templates::WeeklyReport do
     end
 
     it "generates template with mentioning users" do
-      expect(template).to include("bill.doe@example.com didn't send 2.0* hours out of 40.0 hours")
+      expect(template).to include("bill.doe@example.com: *2.0* hours of 40.0")
     end
   end
 end

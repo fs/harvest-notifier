@@ -5,7 +5,7 @@ require "jbuilder"
 module HarvestNotifier
   module Templates
     class Base
-      attr_reader :assigns, :channel
+      attr_reader :assigns, :channel, :url
 
       def self.generate(assigns = {})
         new(assigns).generate
@@ -13,6 +13,8 @@ module HarvestNotifier
 
       def initialize(assigns)
         @channel = ENV.fetch("SLACK_CHANNEL", "general")
+        @url = ENV.fetch("HARVEST_URL", "https://harvestapp.com/")
+
         @assigns = assigns
       end
 

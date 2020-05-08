@@ -29,7 +29,7 @@ module HarvestNotifier
       if users.empty?
         notification.deliver(:congratulation)
       else
-        notification.deliver(:daily_report, users: users)
+        notification.deliver(:daily_report, users: users, date: Date.yesterday)
       end
     end
 

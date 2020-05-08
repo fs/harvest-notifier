@@ -21,7 +21,7 @@ module HarvestNotifier
       reports = harvest_time_report_list(date)
 
       filter_users_with_reports(users, reports) do |user|
-        whitelisted_user?(user) || time_reported?(user)
+        without_weekly_capacity?(user) || whitelisted_user?(user) || time_reported?(user)
       end
     end
 

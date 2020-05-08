@@ -60,7 +60,7 @@ module HarvestNotifier
         .map(&:symbolize_keys)
     end
 
-    def prepare_users_with_reports(users, reports) # rubocop:disable Metrics/AbcSize
+    def prepare_users_with_reports(users, reports)
       reports["results"].each.with_object(users) do |report, result|
         id = report["user_id"]
         reported_hours = report["total_hours"].to_f

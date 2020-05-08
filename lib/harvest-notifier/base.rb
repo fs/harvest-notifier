@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "active_support/core_ext/date/calculations"
+require "active_support/core_ext/date_and_time/calculations"
 
 require "harvest-notifier/report"
 require "harvest-notifier/notification"
@@ -9,8 +10,6 @@ require "harvest-notifier/slack"
 
 module HarvestNotifier
   class Base
-    DAILY_REPORT = %w[Tuesday Wednesday Thursday Friday].freeze
-
     attr_reader :harvest_client, :slack_client, :notification, :report
 
     def initialize
@@ -22,33 +21,31 @@ module HarvestNotifier
     end
 
     def create_daily_report
-      return unless working_day?
+      return unless Date.today.on_weekday?
 
-      users = report.daily
+      day = Date.yesterday
+      users = report.daily(day)
 
       if users.empty?
-        notification.deliver(:congratulation)
+        notification.deliver :congratulation
       else
-        notification.deliver(:daily_report, users: users, date: Date.yesterday)
+        notification.deliver :daily_report, users: users, date: day
       end
     end
 
     def create_weekly_report
       return unless Date.today.monday?
 
-      users = report.weekly
+      week_from = Date.today.last_week
+      week_to = Date.today.last_week + 4
+
+      users = report.weekly(week_from, week_to)
 
       if users.empty?
-        notification.deliver(:congratulation)
+        notification.deliver :congratulation
       else
-        notification.deliver(:weekly_report, users: users)
+        notification.deliver :weekly_report, users: users, week_from: week_from, week_to: week_to
       end
-    end
-
-    private
-
-    def working_day?
-      DAILY_REPORT.include?(Date.today.strftime("%A"))
     end
   end
 end

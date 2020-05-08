@@ -45,7 +45,7 @@ describe HarvestNotifier::Report do
     end
 
     around do |ex|
-      Timecop.freeze(Time.local(2020, 4, 16)) { ex.run }
+      Timecop.freeze(Date.new(2020, 4, 16)) { ex.run }
     end
 
     it "returns Bill Doe without time reports" do
@@ -74,7 +74,7 @@ describe HarvestNotifier::Report do
     end
 
     around do |ex|
-      Timecop.freeze(Time.local(2020, 4, 20)) { ex.run }
+      Timecop.freeze(Date.new(2020, 4, 20)) { ex.run }
     end
 
     it "returns array of users" do

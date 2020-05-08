@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 describe HarvestNotifier::Templates::WeeklyReport do
-  subject(:template) { described_class.generate(users: users) }
+  subject(:template) do
+    described_class.generate(users: users, week_from: Date.new(2020, 4, 6), week_to: Date.new(2020, 4, 10))
+  end
 
   describe "#generate" do
     let(:users) do

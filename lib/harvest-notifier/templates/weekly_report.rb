@@ -6,7 +6,7 @@ module HarvestNotifier
   module Templates
     class WeeklyReport < Base
       REMINDER_TEXT = "*Guys, don't forget to report the working hours in Harvest every day.*"
-      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for *previous week*:"
+      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for the last week: *%<period>s*"
       USER_REPORT = "%<email>s: *%<missing_hours>s* hours of %<weekly_capacity>s"
       REPORT_NOTICE = "_Please, report time and react with :heavy_check_mark: for this message._"
 
@@ -27,7 +27,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text LIST_OF_USERS
+                json.text format(LIST_OF_USERS, period: formatted_period)
               end
             end
             # List of users
@@ -66,6 +66,10 @@ module HarvestNotifier
       end
 
       private
+
+      def formatted_period
+        "#{assigns[:week_from].strftime('%d %b')} - #{assigns[:week_to].strftime('%d %b %Y')}"
+      end
 
       def users_list
         assigns[:users].map do |u|

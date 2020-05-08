@@ -11,6 +11,9 @@ RSpec/MultipleExpectations:
 RSpec/MessageSpies:
   EnforcedStyle: receive
 
+RSpec/ExampleLength:
+  Max: 10
+
 Metrics/BlockLength:
   Exclude:
     - spec/**/*

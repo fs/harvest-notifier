@@ -16,18 +16,18 @@ module HarvestNotifier
       @missing_hours_threshold = ENV.fetch("MISSING_HOURS_THRESHOLD", 1.0).to_f
     end
 
-    def daily
+    def daily(date = Date.yesterday)
       users = prepare_users(harvest_users_list)
-      reports = harvest_time_report_list(Date.yesterday)
+      reports = harvest_time_report_list(date)
 
       filter_users_with_reports(users, reports) do |user|
         whitelisted_user?(user) || time_reported?(user)
       end
     end
 
-    def weekly
+    def weekly(from = Date.today.last_week, to = Date.today.last_week + 4)
       users = prepare_users(harvest_users_list)
-      reports = harvest_time_report_list(Date.today.last_week, Date.today.last_week + 4)
+      reports = harvest_time_report_list(from, to)
 
       filter_users_with_reports(users, reports) do |user|
         whitelisted_user?(user) || full_time_reported?(user)

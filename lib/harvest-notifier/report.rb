@@ -23,7 +23,7 @@ module HarvestNotifier
       users = with_slack(with_reports(report))
 
       filter(users) do |user|
-        whitelisted_user?(user) || time_reported?(user)
+        without_weekly_capacity?(user)|| whitelisted_user?(user) || time_reported?(user)
       end
     end
 

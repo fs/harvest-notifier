@@ -8,7 +8,7 @@ describe HarvestNotifier::Templates::WeeklyReport do
       [
         {
           email: "bill.doe@example.com",
-          id: "U02TEST",
+          slack_id: "U02TEST",
           missing_hours: 2.0,
           weekly_capacity: 40.0
         }
@@ -16,7 +16,7 @@ describe HarvestNotifier::Templates::WeeklyReport do
     end
 
     it "generates template with mentioning users" do
-      expect(template).to include("bill.doe@example.com: *2.0* hours of 40.0")
+      expect(template).to include("<@U02TEST>: *2.0* hours of 40.0")
     end
   end
 end

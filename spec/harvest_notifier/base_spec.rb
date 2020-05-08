@@ -10,9 +10,14 @@ describe HarvestNotifier::Base do
 
   let(:users_data) do
     [
-      { "email" => "bill.doe@example.com" }
+      {
+        email: "bill.doe@example.com",
+        slack_id: "U02TEST"
+      }
     ]
   end
+
+  let(:slack_users) { fixture("slack_users_list") }
 
   before do
     allow(HarvestNotifier::Harvest).to receive(:new) { harvest_double }
@@ -20,6 +25,7 @@ describe HarvestNotifier::Base do
     allow(HarvestNotifier::Report).to receive(:new).with(harvest_double) { report_double }
     allow(HarvestNotifier::Notification).to receive(:new).with(slack_double) { notification_double }
 
+    allow(slack_double).to receive(:users_list) { slack_users }
     allow(report_double).to receive(:daily) { users_data }
     allow(report_double).to receive(:weekly) { users_data }
     allow(notification_double).to receive(:deliver)

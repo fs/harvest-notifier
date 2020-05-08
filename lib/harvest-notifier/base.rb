@@ -13,6 +13,8 @@ module HarvestNotifier
 
     attr_reader :harvest_client, :slack_client, :notification, :report
 
+    delegate :users_list, to: :slack_client, prefix: :slack
+
     def initialize
       @harvest_client = Harvest.new(ENV.fetch("HARVEST_TOKEN"), ENV.fetch("HARVEST_ACCOUNT_ID"))
       @slack_client = Slack.new(ENV.fetch("SLACK_TOKEN"))
@@ -29,7 +31,7 @@ module HarvestNotifier
       if users.empty?
         notification.deliver(:congratulation)
       else
-        notification.deliver(:daily_report, users: users, date: Date.yesterday)
+        notification.deliver(:daily_report, users: with_slack_mention(users), date: Date.yesterday)
       end
     end
 
@@ -41,11 +43,23 @@ module HarvestNotifier
       if users.empty?
         notification.deliver(:congratulation)
       else
-        notification.deliver(:weekly_report, users: users)
+        notification.deliver(:weekly_report, users: with_slack_mention(users))
       end
     end
 
     private
+
+    def with_slack_mention(users)
+      users.each do |user|
+        slack_id = slack_users.find { |u| u["profile"]["email"] == user[:email] }["id"]
+
+        user[:slack_id] = slack_id
+      end
+    end
+
+    def slack_users
+      @slack_users ||= slack_users_list["members"]
+    end
 
     def working_day?
       DAILY_REPORT.include?(Date.today.strftime("%A"))

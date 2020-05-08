@@ -7,7 +7,7 @@ module HarvestNotifier
     class WeeklyReport < Base
       REMINDER_TEXT = "*Guys, don't forget to report the working hours in Harvest every day.*"
       LIST_OF_USERS = "Here is a list of people who didn't report the working hours for *previous week*:"
-      USER_REPORT = "%<email>s: *%<missing_hours>s* hours of %<weekly_capacity>s"
+      USER_REPORT = "%<mention>s: *%<missing_hours>s* hours of %<weekly_capacity>s"
       REPORT_NOTICE = "_Please, report time and react with :heavy_check_mark: for this message._"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -71,6 +71,7 @@ module HarvestNotifier
         assigns[:users].map do |u|
           u[:missing_hours] = u[:missing_hours].round(2)
           u[:weekly_capacity] = u[:weekly_capacity].round(2)
+          u[:mention] = u[:slack_id] ? "<@#{u[:slack_id]}>" : u[:email]
           format(USER_REPORT, u)
         end
       end

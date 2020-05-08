@@ -34,7 +34,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text users_list
+                json.text users_list.join(" \n • ").prepend("• ")
               end
             end
             # Report notice
@@ -71,7 +71,9 @@ module HarvestNotifier
       end
 
       def users_list
-        assigns[:users].map { |u| u[:email] }.join(" \n • ").prepend("• ")
+        assigns[:users].map do |u|
+          u[:slack_id] ? "<@#{u[:slack_id]}>" : u[:email]
+        end
       end
     end
   end

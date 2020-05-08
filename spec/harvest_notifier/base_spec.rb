@@ -17,7 +17,7 @@ describe HarvestNotifier::Base do
   before do
     allow(HarvestNotifier::Harvest).to receive(:new) { harvest_double }
     allow(HarvestNotifier::Slack).to receive(:new) { slack_double }
-    allow(HarvestNotifier::Report).to receive(:new).with(harvest_double) { report_double }
+    allow(HarvestNotifier::Report).to receive(:new).with(harvest_double, slack_double) { report_double }
     allow(HarvestNotifier::Notification).to receive(:new).with(slack_double) { notification_double }
 
     allow(report_double).to receive(:daily) { users_data }

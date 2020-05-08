@@ -35,7 +35,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text users_list
+                json.text users_list.join(" \n • ").prepend("• ")
               end
             end
             # Report notice
@@ -68,7 +68,11 @@ module HarvestNotifier
       private
 
       def users_list
-        assigns[:users].map { |u| format(USER_REPORT, u) }.join(" \n • ").prepend("• ")
+        assigns[:users].map do |u|
+          u[:missing_hours] = u[:missing_hours].round(2)
+          u[:weekly_capacity] = u[:weekly_capacity].round(2)
+          format(USER_REPORT, u)
+        end
       end
     end
   end

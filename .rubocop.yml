@@ -15,9 +15,6 @@ Metrics/BlockLength:
   Exclude:
     - spec/**/*
 
-Metrics/AbcSize:
-  Max: 17
-
 Style/Documentation:
   Description: 'Document classes and non-namespace modules.'
   Enabled: false

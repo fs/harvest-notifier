@@ -43,13 +43,13 @@ module HarvestNotifier
     end
 
     def prepared_user(user)
-      hours = (user["weekly_capacity"].to_f / 3600).round(2)
+      hours = user["weekly_capacity"].to_f / 3600
 
       {
         "email" => user["email"],
         "weekly_capacity" => hours,
         "missing_hours" => hours,
-        "total_hours" => 0.0
+        "total_hours" => 0
       }
     end
 
@@ -65,8 +65,8 @@ module HarvestNotifier
         id = report["user_id"]
         reported_hours = report["total_hours"].to_f
 
-        result[id]["missing_hours"] = (result[id]["missing_hours"] - reported_hours).round(2)
-        result[id]["total_hours"] = (result[id]["total_hours"] + reported_hours).round(2)
+        result[id]["missing_hours"] -= reported_hours
+        result[id]["total_hours"] += reported_hours
       end
     end
 

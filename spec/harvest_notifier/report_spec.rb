@@ -1,35 +1,61 @@
 # frozen_string_literal: true
 
 describe HarvestNotifier::Report do
-  subject(:report) { described_class.new(harvest) }
+  subject(:report) { described_class.new(harvest, slack) }
 
   let(:harvest) { instance_double(HarvestNotifier::Harvest) }
+  let(:slack) { instance_double(HarvestNotifier::Slack) }
 
-  let(:john_doe) do
+  let(:john_smith) do
     {
-      "id" => 123,
+      "harvest_id" => 123,
       "email" => "john.smith@example.com",
-      "weekly_capacity" => 144_000
+      "weekly_capacity" => 144_000,
+      "slack_id" => "U01TEST"
     }
   end
 
   let(:bill_doe) do
     {
-      "id" => 345,
+      "harvest_id" => 345,
       "email" => "bill.doe@example.com",
-      "weekly_capacity" => 144_000
+      "weekly_capacity" => 144_000,
+      "slack_id" => "U02TEST"
     }
   end
 
   let(:harvest_users) do
     {
-      "users" => [john_doe, bill_doe]
+      "users" => [
+        {
+          "id" => john_smith["harvest_id"],
+          "email" => john_smith["email"],
+          "weekly_capacity" => john_smith["weekly_capacity"]
+        },
+        {
+          "id" => bill_doe["harvest_id"],
+          "email" => bill_doe["email"],
+          "weekly_capacity" => bill_doe["weekly_capacity"]
+        }
+      ]
+    }
+  end
+
+  let(:slack_users) do
+    {
+      "members" => [
+        {
+          "id" => bill_doe["slack_id"],
+          "profile" => { "email" => bill_doe["email"] }
+        }
+      ]
     }
   end
 
   before do
     allow(harvest).to receive(:users_list) { harvest_users }
     allow(harvest).to receive(:time_report_list) { harvest_time_report }
+    allow(slack).to receive(:users_list) { slack_users }
   end
 
   describe "#daily" do
@@ -37,7 +63,7 @@ describe HarvestNotifier::Report do
       {
         "results" => [
           {
-            "user_id" => john_doe["id"],
+            "user_id" => john_smith["harvest_id"],
             "total_hours" => 6.0
           }
         ]
@@ -49,11 +75,11 @@ describe HarvestNotifier::Report do
     end
 
     it "returns Bill Doe without time reports" do
-      expect(report.daily).to include(include(email: bill_doe["email"]))
+      expect(report.daily).to include(include(email: bill_doe["email"], slack_id: bill_doe["slack_id"]))
     end
 
-    it "does not return John Doe with time report" do
-      expect(report.daily).not_to include(include(email: john_doe["email"]))
+    it "does not return John Smith with time report" do
+      expect(report.daily).not_to include(include(email: john_smith["email"]))
     end
   end
 
@@ -62,12 +88,12 @@ describe HarvestNotifier::Report do
       {
         "results" => [
           {
-            "user_id" => john_doe["id"],
-            "total_hours" => 39.0
+            "user_id" => john_smith["harvest_id"],
+            "total_hours" => 35.25
           },
           {
-            "user_id" => bill_doe["id"],
-            "total_hours" => 35.25
+            "user_id" => bill_doe["harvest_id"],
+            "total_hours" => 39.00
           }
         ]
       }
@@ -81,12 +107,13 @@ describe HarvestNotifier::Report do
       expect(report.weekly).to be_a_kind_of(Array)
     end
 
-    it "returns Bill Does with missing 5 hours" do
-      expect(report.weekly).to include(include(email: bill_doe["email"], missing_hours: 4.75))
+    it "returns John Smith with missing 5 hours and empty Slack id" do
+      expect(report.weekly)
+        .to include(include(email: john_smith["email"], missing_hours: 4.75, slack_id: ""))
     end
 
-    it "does not return John Doe with missing 1 hour b/c of threshold default 1.0 hour" do
-      expect(report.weekly).not_to include(include(email: john_doe["email"]))
+    it "does not return Bill Doe with missing 1 hour b/c of threshold default 1.0 hour" do
+      expect(report.weekly).not_to include(include(email: bill_doe["email"]))
     end
   end
 end

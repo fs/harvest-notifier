@@ -17,7 +17,7 @@ module HarvestNotifier
       @slack_client = Slack.new(ENV.fetch("SLACK_TOKEN"))
 
       @notification = Notification.new(slack_client)
-      @report = Report.new(harvest_client)
+      @report = Report.new(harvest_client, slack_client)
     end
 
     def create_daily_report

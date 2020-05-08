@@ -6,8 +6,9 @@ module HarvestNotifier
   module Templates
     class DailyReport < Base
       REMINDER_TEXT = "*Guys, don't forget to report the working hours in Harvest every day.*"
-      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for *%<current_date>s*:"
-      REPORT_NOTICE = "_Please, report time and react with :heavy_check_mark: for this message._"
+      USERS_LIST_TEXT = "Here is a list of people who didn't report the working hours for *%<current_date>s*:"
+      REPORT_NOTICE_TEXT = "_Please, report time and react with :heavy_check_mark: for this message._"
+      USER_ITEM = "• <@%<slack_id>s>"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength
@@ -26,7 +27,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text format(LIST_OF_USERS, current_date: formatted_date)
+                json.text format(USERS_LIST_TEXT, current_date: formatted_date)
               end
             end
             # List of users
@@ -42,7 +43,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text REPORT_NOTICE
+                json.text REPORT_NOTICE_TEXT
               end
             end
             # Report Time button
@@ -71,7 +72,9 @@ module HarvestNotifier
       end
 
       def users_list
-        assigns[:users].map { |u| u[:email] }.join(" \n • ").prepend("• ")
+        assigns[:users]
+          .map { |u| format(USER_ITEM, u) }
+          .join("\n")
       end
     end
   end

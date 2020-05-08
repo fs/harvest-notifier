@@ -6,9 +6,9 @@ module HarvestNotifier
   module Templates
     class WeeklyReport < Base
       REMINDER_TEXT = "*Guys, don't forget to report the working hours in Harvest every day.*"
-      LIST_OF_USERS = "Here is a list of people who didn't report the working hours for the last week: *%<period>s*"
-      USER_REPORT = "%<email>s: *%<missing_hours>s* hours of %<weekly_capacity>s"
-      REPORT_NOTICE = "_Please, report time and react with :heavy_check_mark: for this message._"
+      USERS_LIST_TEXT = "Here is a list of people who didn't report the working hours for the last week: *%<period>s*"
+      REPORT_NOTICE_TEXT = "_Please, report time and react with :heavy_check_mark: for this message._"
+      USER_ITEM = "• <@%<slack_id>s>: *%<missing_hours>s* hours of %<weekly_capacity>s"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength
@@ -27,7 +27,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text format(LIST_OF_USERS, period: formatted_period)
+                json.text format(USERS_LIST_TEXT, period: formatted_period)
               end
             end
             # List of users
@@ -35,7 +35,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text users_list.join(" \n • ").prepend("• ")
+                json.text users_list
               end
             end
             # Report notice
@@ -43,7 +43,7 @@ module HarvestNotifier
               json.type "section"
               json.text do
                 json.type "mrkdwn"
-                json.text REPORT_NOTICE
+                json.text REPORT_NOTICE_TEXT
               end
             end
             # Report Time button
@@ -72,10 +72,15 @@ module HarvestNotifier
       end
 
       def users_list
-        assigns[:users].map do |u|
+        round_hours(assigns[:users])
+          .map { |u| format(USER_ITEM, u) }
+          .join("\n")
+      end
+
+      def round_hours(users)
+        users.each do |u|
           u[:missing_hours] = u[:missing_hours].round(2)
           u[:weekly_capacity] = u[:weekly_capacity].round(2)
-          format(USER_REPORT, u)
         end
       end
     end

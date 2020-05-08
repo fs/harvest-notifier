@@ -10,8 +10,6 @@ require "harvest-notifier/slack"
 
 module HarvestNotifier
   class Base
-    DAILY_REPORT = %w[Tuesday Wednesday Thursday Friday].freeze
-
     attr_reader :harvest_client, :slack_client, :notification, :report
 
     def initialize

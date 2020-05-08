@@ -25,13 +25,13 @@ module HarvestNotifier
     def create_daily_report
       return unless Date.today.on_weekday?
 
-      yesterday = Date.yesterday
-      users = report.daily(yesterday)
+      day = Date.yesterday
+      users = report.daily(day)
 
       if users.empty?
         notification.deliver :congratulation
       else
-        notification.deliver :daily_report, users: users, date: yesterday
+        notification.deliver :daily_report, users: users, date: day
       end
     end
 

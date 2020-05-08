@@ -30,7 +30,7 @@ module HarvestNotifier
       reports = harvest_time_report_list(from, to)
 
       filter_users_with_reports(users, reports) do |user|
-        whitelisted_user?(user) || full_time_reported?(user)
+        without_weekly_capacity?(user) || whitelisted_user?(user) || full_time_reported?(user)
       end
     end
 
@@ -80,6 +80,10 @@ module HarvestNotifier
 
     def full_time_reported?(user)
       time_reported?(user) && missing_hours_insignificant?(user)
+    end
+
+    def without_weekly_capacity?(user)
+      user["weekly_capacity"].zero?
     end
 
     def missing_hours_insignificant?(user)

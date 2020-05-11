@@ -20,15 +20,10 @@ bin/setup
 ```
 
 3. Prepare access tokens
-
-  3.1 Create Personal Access Tokens on Harvest
-  [![Harvest](https://www.getharvest.com/assets/press/harvest-logo-capsule-9b74927af1c93319c7d6c47ee89d4c2d442f569492c82899b203dd3bdeaa81a4.png){:height="250px" width="250px"}](https://id.getharvest.com/developers)
-
-  3.2 Create Slack app
-  [![Slack](https://cdn.brandfolder.io/5H442O3W/at/pl546j-7le8zk-6gwiyo/Slack_Mark.svg){:height="250px" width="250px"}](https://api.slack.com/apps)
-
-  3.3 Create Bot User OAuth Access Token
-  3.4 Add following scopes:
+  * Create Personal Access Tokens on Harvest: https://id.getharvest.com/developers
+  * Create Slack app: https://api.slack.com/apps
+  * Create Bot User OAuth Access Token
+  * Add following scopes:
   ```bash
   chat:write
   incoming-webhook

@@ -37,7 +37,7 @@ module HarvestNotifier
       return unless Date.today.monday?
 
       week_from = Date.today.last_week
-      week_to = Date.today.last_week + 4
+      week_to = week_from + 4
 
       users = report.weekly(week_from, week_to)
 

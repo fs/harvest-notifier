@@ -1,6 +1,7 @@
 # Harvest Notifier Script
 
 [![Build Status](https://flatstack.semaphoreci.com/badges/harvest-notifier.svg)](https://flatstack.semaphoreci.com/projects/harvest-notifier)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/fs/harvest-notifier)
 
 This is a ruby library to install on Daily Heroku Scheduler.
 It will notification in Slack about users who forgot to mark their working hours in Harvest.

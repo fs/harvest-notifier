@@ -59,7 +59,7 @@ describe HarvestNotifier::Report do
   end
 
   describe "#daily" do
-    let(:date) { Date.yesterday }
+    let(:date) { Date.new(2020, 4, 15) }
     let(:harvest_time_report) do
       {
         "results" => [
@@ -82,7 +82,7 @@ describe HarvestNotifier::Report do
   end
 
   describe "#weekly" do
-    let(:from) { Date.today.last_week }
+    let(:from) { Date.new(2020, 4, 6) }
     let(:to) { from + 4 }
     let(:harvest_time_report) do
       {

@@ -43,5 +43,10 @@
     "deadmanssnitch:the-lone-snitch",
     "scheduler:standard",
     "rollbar:free"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
   ]
 }

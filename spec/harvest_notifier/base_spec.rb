@@ -10,7 +10,18 @@ describe HarvestNotifier::Base do
 
   let(:users_data) do
     [
-      { "email" => "bill.doe@example.com" }
+      {
+        email: "john.smith@example.com",
+        weekly_capacity: 144_000,
+        slack_id: "U01TEST",
+        missing_hours: 2.0
+      },
+      {
+        email: "bill.doe@example.com",
+        weekly_capacity: 144_000,
+        slack_id: "U02TEST",
+        missing_hours: 5.0
+      }
     ]
   end
 

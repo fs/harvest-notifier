@@ -59,6 +59,7 @@ describe HarvestNotifier::Report do
   end
 
   describe "#daily" do
+    let(:date) { Date.new(2020, 4, 15) }
     let(:harvest_time_report) do
       {
         "results" => [
@@ -70,20 +71,19 @@ describe HarvestNotifier::Report do
       }
     end
 
-    around do |ex|
-      Timecop.freeze(Date.new(2020, 4, 16)) { ex.run }
-    end
-
     it "returns Bill Doe without time reports" do
-      expect(report.daily).to include(include(email: bill_doe["email"], slack_id: bill_doe["slack_id"]))
+      expect(report.daily(date))
+        .to include(include(email: bill_doe["email"], slack_id: bill_doe["slack_id"]))
     end
 
     it "does not return John Smith with time report" do
-      expect(report.daily).not_to include(include(email: john_smith["email"]))
+      expect(report.daily(date)).not_to include(include(email: john_smith["email"]))
     end
   end
 
   describe "#weekly" do
+    let(:from) { Date.new(2020, 4, 6) }
+    let(:to) { from + 4 }
     let(:harvest_time_report) do
       {
         "results" => [
@@ -99,16 +99,12 @@ describe HarvestNotifier::Report do
       }
     end
 
-    around do |ex|
-      Timecop.freeze(Date.new(2020, 4, 20)) { ex.run }
-    end
-
     it "returns array of users" do
-      expect(report.weekly).to be_a_kind_of(Array)
+      expect(report.weekly(from, to)).to be_a_kind_of(Array)
     end
 
     it "returns John Smith with missing 5 hours and empty Slack id" do
-      expect(report.weekly)
+      expect(report.weekly(from, to))
         .to include(include(email: john_smith["email"], missing_hours: 4.75, slack_id: ""))
     end
 

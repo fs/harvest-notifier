@@ -9,11 +9,11 @@ Notification determined from Harvest API V2.
 ## Quick Start
 
 1. Сlone repo
-
 ```bash
 git clone git@github.com:fs/harvest-notifier.git
 cd harvest-notifier
 ```
+
 2. Setup project
 ```bash
 bin/setup
@@ -31,7 +31,7 @@ bin/setup
   users:read.email
   ```
 
-4. [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/fs/harvest-notifier)
+4. [Deploy to Heroku](https://heroku.com/deploy?template=https://github.com/fs/harvest-notifier)
 
 5. Configure following ENV variables
 ```bash

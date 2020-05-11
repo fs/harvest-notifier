@@ -1,0 +1,52 @@
+{
+  "name": "Harvest Notifier",
+  "description": "Automatic notification script for Slack based on Harvest data",
+  "repository": "https://github.com/fs/harvest-notifier/",
+  "keywords": [
+    "harvest",
+    "notification",
+    "slack"
+  ],
+  "env": {
+    "ROLLBAR_ACCESS_TOKEN": {
+      "required": true
+    },
+    "SNITCH_DAILY": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "generator": "secret"
+    },
+    "HARVEST_TOKEN": {
+      "required": true
+    },
+    "HARVEST_ACCOUNT_ID": {
+      "required": true
+    },
+    "SLACK_TOKEN": {
+      "required": true
+    },
+    "EMAILS_WHITELIST": {
+      "required": false
+    },
+    "HARVEST_URL": {
+      "required": false
+    },
+    "MISSING_HOURS_THRESHOLD": {
+      "required": false
+    },
+    "SLACK_CHANNEL": {
+      "required": false
+    }
+  },
+  "addons": [
+    "deadmanssnitch:the-lone-snitch",
+    "scheduler:standard",
+    "rollbar:free"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}

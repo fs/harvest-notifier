@@ -5,4 +5,4 @@ $LOAD_PATH << lib_dir unless $LOAD_PATH.include?(lib_dir)
 
 require "harvest-notifier/slack_handler"
 
-run SlackHandler.new
+run HarvestNotifier::SlackHandler.new

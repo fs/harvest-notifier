@@ -71,6 +71,7 @@ module HarvestNotifier
                     json.type "plain_text"
                     json.text ":repeat: Refresh"
                   end
+                  json.value refresh_value
                 end
               end
             end
@@ -82,6 +83,10 @@ module HarvestNotifier
 
       def formatted_date
         assigns[:date].strftime("%B%eth")
+      end
+
+      def refresh_value
+        "daily:#{assigns[:date]}"
       end
 
       def users_list

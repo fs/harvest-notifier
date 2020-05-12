@@ -4,7 +4,8 @@ class SlackHandler
   def call(env)
     req = Rack::Request.new(env)
 
-    pp req.params
+    puts "Params:"
+    puts req.params.inspect
 
     [200, {"Content-Type" => "text/html"}, ["Hello Slack!"]]
   end

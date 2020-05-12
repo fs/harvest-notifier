@@ -38,43 +38,21 @@ describe HarvestNotifier::Base do
 
   describe "#create_daily_report" do
     it "creates daily notification" do
-      Timecop.freeze(Date.new(2020, 4, 16)) do
-        expect(report_double).to receive(:daily) { users_data }
-        expect(notification_double).to receive(:deliver)
-          .with(:daily_report, users: users_data, date: Date.new(2020, 4, 15))
+      expect(report_double).to receive(:daily) { users_data }
+      expect(notification_double).to receive(:deliver)
+        .with(:daily_report, users: users_data, date: Date.new(2020, 4, 15))
 
-        base.create_daily_report
-      end
-    end
-
-    it "does not create daily notification" do
-      Timecop.freeze(Date.new(2020, 4, 18)) do
-        expect(report_double).not_to receive(:daily)
-        expect(notification_double).not_to receive(:deliver)
-
-        base.create_daily_report
-      end
+      base.create_daily_report(Date.new(2020, 4, 15))
     end
   end
 
   describe "#create_weekly_report" do
     it "creates weekly notification" do
-      Timecop.freeze(Date.new(2020, 4, 13)) do
-        expect(report_double).to receive(:weekly) { users_data }
-        expect(notification_double).to receive(:deliver)
-          .with(:weekly_report, users: users_data, week_from: Date.new(2020, 4, 6), week_to: Date.new(2020, 4, 10))
+      expect(report_double).to receive(:weekly) { users_data }
+      expect(notification_double).to receive(:deliver)
+        .with(:weekly_report, users: users_data, date_from: Date.new(2020, 4, 6), date_to: Date.new(2020, 4, 10))
 
-        base.create_weekly_report
-      end
-    end
-
-    it "does not create weekly notification" do
-      Timecop.freeze(Date.new(2020, 4, 14)) do
-        expect(report_double).not_to receive(:weekly)
-        expect(notification_double).not_to receive(:deliver).with(:weekly_report, users: users_data)
-
-        base.create_weekly_report
-      end
+      base.create_weekly_report(Date.new(2020, 4, 6), Date.new(2020, 4, 10))
     end
   end
 end

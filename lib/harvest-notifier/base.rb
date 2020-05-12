@@ -20,31 +20,23 @@ module HarvestNotifier
       @report = Report.new(harvest_client, slack_client)
     end
 
-    def create_daily_report
-      return unless Date.today.on_weekday?
-
-      day = Date.yesterday
-      users = report.daily(day)
+    def create_daily_report(date)
+      users = report.daily(date)
 
       if users.empty?
         notification.deliver :congratulation
       else
-        notification.deliver :daily_report, users: users, date: day
+        notification.deliver :daily_report, users: users, date: date
       end
     end
 
-    def create_weekly_report
-      return unless Date.today.monday?
-
-      week_from = Date.today.last_week
-      week_to = week_from + 4
-
-      users = report.weekly(week_from, week_to)
+    def create_weekly_report(date_from, date_to)
+      users = report.weekly(date_from, date_to)
 
       if users.empty?
         notification.deliver :congratulation
       else
-        notification.deliver :weekly_report, users: users, week_from: week_from, week_to: week_to
+        notification.deliver :weekly_report, users: users, date_from: date_from, date_to: date_to
       end
     end
   end

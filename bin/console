@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-$: << 'lib'
+$: << "lib"
+
 require "bundler/setup"
 require "byebug"
 require "harvest_notifier"

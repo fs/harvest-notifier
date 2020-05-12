@@ -2,7 +2,7 @@
 
 describe HarvestNotifier::Templates::WeeklyReport do
   subject(:template) do
-    described_class.generate(users: users, week_from: Date.new(2020, 4, 6), week_to: Date.new(2020, 4, 10))
+    described_class.generate(users: users, date_from: Date.new(2020, 4, 6), date_to: Date.new(2020, 4, 10))
   end
 
   describe "#generate" do

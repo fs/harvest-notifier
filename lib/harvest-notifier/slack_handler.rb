@@ -10,17 +10,25 @@ module HarvestNotifier
     def call(env)
       req = Rack::Request.new(env)
 
-      unless req.params.include?("payload")
-        return unprocessable_entity("Payload param is missing")
+      return unprocessable_entity("Payload is missing") if req.params["payload"].nil?
+
+      payload = parse_payload(req.params["payload"])
+      return unprocessable_entity("Empty Payload") if payload.nil?
+
+      response_url = payload["response_url"]
+      return unprocessable_entity("Response URL is missing") if response_url.nil?
+
+      action_type, date_from, date_to = action_type(payload)
+      return unprocessable_entity("Action Type is missing") if action_type.nil?
+
+      case action_type
+      when :daily
+        daily_report
+      when :weekly
+        weekly_report
+      else
+        return unprocessable_entity("Invalid Action Type")
       end
-
-      unless payload = parse_payload(req.params["payload"])
-        return unprocessable_entity("Empty Payload")
-      end
-
-      puts payload["response_url"]
-
-      [200, { "Content-Type" => "text/plain" }, ["OK"]]
     end
 
     private
@@ -33,6 +41,12 @@ module HarvestNotifier
       JSON.parse(json)
     rescue JSON::ParserError
       nil
+    end
+
+    def daily_report(date_from)
+    end
+
+    def weekly_report(date_from, date_to)
     end
   end
 end

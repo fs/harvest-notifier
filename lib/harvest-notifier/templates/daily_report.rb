@@ -14,7 +14,6 @@ module HarvestNotifier
         Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength
           json.channel channel
           json.blocks do # rubocop:disable Metrics/BlockLength
-
             # Reminder text
             json.child! do
               json.type "section"

@@ -12,10 +12,10 @@ module HarvestNotifier
   class SlackHandler
     ACTION_TYPES = %w[daily weekly].freeze
 
-    attr_reader :env
+    attr_reader :request
 
     def call(env)
-      @env = env
+      @request = Rack::Request.new(env)
 
       return unprocessable_entity("Empty Payload") if payload.blank?
       return unprocessable_entity("Response URL is missing") if response_url.blank?
@@ -27,10 +27,6 @@ module HarvestNotifier
     end
 
     private
-
-    def request
-      @request ||= Rack::Request.new(@env)
-    end
 
     def unprocessable_entity(message)
       puts "Env: #{@env}"

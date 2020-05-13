@@ -6,6 +6,8 @@ require "active_support/json"
 require "active_support/core_ext/object/json"
 require "active_support/core_ext/string/conversions"
 
+require "harvest_notifier/base"
+
 module HarvestNotifier
   class SlackHandler
     ACTION_TYPES = %w[daily weekly].freeze

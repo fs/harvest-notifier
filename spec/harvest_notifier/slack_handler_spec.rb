@@ -5,7 +5,7 @@ require "rack/test"
 require "active_support/json"
 require "active_support/core_ext/object/json"
 
-require "harvest-notifier/slack_handler"
+require "harvest_notifier/slack_handler"
 
 describe HarvestNotifier::SlackHandler do
   include Rack::Test::Methods

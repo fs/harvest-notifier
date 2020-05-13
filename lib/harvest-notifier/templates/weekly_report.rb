@@ -22,6 +22,7 @@ module HarvestNotifier
                 json.text REMINDER_TEXT
               end
             end
+
             # Pretext list of users
             json.child! do
               json.type "section"
@@ -30,6 +31,7 @@ module HarvestNotifier
                 json.text format(USERS_LIST_TEXT, period: formatted_period)
               end
             end
+
             # List of users
             json.child! do
               json.type "section"
@@ -38,6 +40,7 @@ module HarvestNotifier
                 json.text users_list
               end
             end
+
             # Report notice
             json.child! do
               json.type "section"
@@ -46,6 +49,7 @@ module HarvestNotifier
                 json.text REPORT_NOTICE_TEXT
               end
             end
+
             # Report Time button
             json.child! do
               json.type "actions"
@@ -58,6 +62,15 @@ module HarvestNotifier
                     json.type "plain_text"
                     json.text "Report Time"
                   end
+                end
+
+                json.child! do
+                  json.type "button"
+                  json.text do
+                    json.type "plain_text"
+                    json.text ":repeat: Refresh"
+                  end
+                  json.value refresh_value
                 end
               end
             end
@@ -82,6 +95,10 @@ module HarvestNotifier
           u[:missing_hours] = u[:missing_hours].round(2)
           u[:weekly_capacity] = u[:weekly_capacity].round(2)
         end
+      end
+
+      def refresh_value
+        "weekly:#{assigns[:date_from]}:#{assigns[:date_to]}"
       end
     end
   end

@@ -32,6 +32,7 @@ module HarvestNotifier
 
     def unprocessable_entity(message)
       puts "Error: #{message}"
+
       [422, {}, ["Unprocessable entity: #{message}"]]
     end
 

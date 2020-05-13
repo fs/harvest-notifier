@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "harvest-notifier/templates/base"
+require "harvest_notifier/templates/base"
 
 module HarvestNotifier
   module Templates

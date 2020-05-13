@@ -3,20 +3,20 @@
 require "active_support/core_ext/date/calculations"
 require "active_support/core_ext/date_and_time/calculations"
 
-require "harvest-notifier/report"
-require "harvest-notifier/notification"
-require "harvest-notifier/harvest"
-require "harvest-notifier/slack"
+require "harvest_notifier/report"
+require "harvest_notifier/notification"
+require "harvest_notifier/harvest"
+require "harvest_notifier/slack"
 
 module HarvestNotifier
   class Base
     attr_reader :harvest_client, :slack_client, :notification, :report
 
-    def initialize
+    def initialize(notification_update_url: nil)
       @harvest_client = Harvest.new(ENV.fetch("HARVEST_TOKEN"), ENV.fetch("HARVEST_ACCOUNT_ID"))
       @slack_client = Slack.new(ENV.fetch("SLACK_TOKEN"))
 
-      @notification = Notification.new(slack_client)
+      @notification = Notification.new(slack_client, update_url: notification_update_url)
       @report = Report.new(harvest_client, slack_client)
     end
 

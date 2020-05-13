@@ -8,6 +8,7 @@ gem "activesupport"
 gem "dotenv"
 gem "httparty"
 gem "jbuilder"
+gem "rack"
 gem "rake"
 gem "rollbar"
 gem "snitcher"
@@ -15,6 +16,7 @@ gem "snitcher"
 group :development do
   gem "bundler-audit", require: false
   gem "byebug"
+  gem "rack-test"
   gem "rspec"
   gem "rubocop"
   gem "rubocop-rspec", require: false

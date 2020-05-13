@@ -9,10 +9,10 @@
   ],
   "env": {
     "ROLLBAR_ACCESS_TOKEN": {
-      "required": true
+      "required": false
     },
     "SNITCH_DAILY": {
-      "required": true
+      "required": false
     },
     "SECRET_KEY_BASE": {
       "generator": "secret"

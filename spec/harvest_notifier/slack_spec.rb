@@ -20,6 +20,22 @@ describe HarvestNotifier::Slack do
     end
   end
 
+  describe "update_message" do
+    let(:message) { "Hello!" }
+    let(:update_url) { "https://hooks.slack.com/actions/T0251E50M" }
+    let(:headers) { { "Content-type" => "application/json" } }
+
+    before do
+      stub_request(:post, update_url)
+        .with(headers: headers, body: message)
+        .to_return(status: 200)
+    end
+
+    it "success" do
+      expect(slack.update_message(message, update_url)).to be_success
+    end
+  end
+
   describe "#users_list" do
     let(:slack_users_list) { fixture("slack_users_list") }
 

@@ -6,10 +6,12 @@ require "harvest_notifier/rollbar"
 require "harvest_notifier/base"
 
 module HarvestNotifier
+  DAILY_REPORT = %w[Tuesday Wednesday Thursday Friday].freeze
+
   module_function
 
   def create_daily_report
-    return unless Date.today.on_weekday?
+    return unless DAILY_REPORT.include?(Date.today.strftime("%A"))
 
     HarvestNotifier::Base.new.create_daily_report(Date.yesterday)
   end

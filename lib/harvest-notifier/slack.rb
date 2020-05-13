@@ -18,6 +18,11 @@ module HarvestNotifier
       self.class.post("/chat.postMessage", body: body)
     end
 
+    def update_message(body, update_url)
+      self.class.headers.delete "Authorization"
+      self.class.post(update_url, body: body)
+    end
+
     def users_list
       self.class.get("/users.list")
     end

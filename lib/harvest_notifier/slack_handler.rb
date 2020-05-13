@@ -30,6 +30,7 @@ module HarvestNotifier
     private
 
     def unprocessable_entity(message, request)
+      puts "Error: #{message}"
       puts "Request: #{request.inspect}"
 
       [422, {}, ["Unprocessable entity: #{message}"]]

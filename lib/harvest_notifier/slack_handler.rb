@@ -12,73 +12,61 @@ module HarvestNotifier
   class SlackHandler
     ACTION_TYPES = %w[daily weekly].freeze
 
-    attr_reader :request
-
     def call(env)
-      @request = Rack::Request.new(env)
+      request = Rack::Request.new(env)
+      payload = parse_payload(payload_json(request))
+      response_url = payload["response_url"]
+      action_params = parse_action_params(action_value(payload))
 
-      return unprocessable_entity("Empty Payload") if payload.blank?
-      return unprocessable_entity("Response URL is missing") if response_url.blank?
-      return unprocessable_entity("Type is missing") unless ACTION_TYPES.any?(report_params[:type])
+      return unprocessable_entity("Empty Payload", request) if payload.blank?
+      return unprocessable_entity("Response URL is missing", request) if response_url.blank?
+      return unprocessable_entity("Type is missing", request) unless ACTION_TYPES.any?(action_params[:type])
 
-      update_report!
+      update_report!(action_params, response_url)
 
       [200, {}, ["OK"]]
     end
 
     private
 
-    def unprocessable_entity(message)
-      puts "Params: #{request.params}"
-      puts "Payload: #{payload_json}"
-      puts "Error: #{message}"
+    def unprocessable_entity(message, request)
+      puts "Request: #{request.inspect}"
 
       [422, {}, ["Unprocessable entity: #{message}"]]
     end
 
-    def payload_json
-      @payload_json ||= request.params["payload"] || ""
+    def payload_json(request)
+      request.params["payload"] || ""
     end
 
-    def payload
-      @payload ||=
-        begin
-          JSON.parse(payload_json)
-        rescue JSON::ParserError
-          nil
-        end
+    def action_value(payload)
+      payload.dig("actions", 0, "value") || ""
     end
 
-    def response_url
-      @response_url ||= payload["response_url"]
+    def parse_payload(json)
+      JSON.parse(json)
+    rescue JSON::ParserError
+      {}
     end
 
-    def action_value
-      @action_value ||= payload.dig("actions", 0, "value") || ""
+    def parse_action_params(action_value)
+      type, from, to = action_value.split(":")
+
+      {
+        type: type,
+        from: from&.to_date,
+        to: to&.to_date
+      }
     end
 
-    def report_params
-      @report_params ||= begin
-        type, from, to = action_value.split(":")
+    def update_report!(action_params, response_url)
+      notifier = HarvestNotifier::Base.new(notification_update_url: response_url)
 
-        {
-          type: type,
-          from: from&.to_date,
-          to: to&.to_date
-        }
-      end
-    end
-
-    def update_report!
-      if report_params[:type] == "daily"
-        notifier.create_daily_report(report_params[:from])
+      if action_params[:type] == "daily"
+        notifier.create_daily_report(action_params[:from])
       else
-        notifier.create_weekly_report(report_params[:from], report_params[:to])
+        notifier.create_weekly_report(action_params[:from], action_params[:to])
       end
-    end
-
-    def notifier
-      @notifier ||= HarvestNotifier::Base.new(notification_update_url: response_url)
     end
   end
 end

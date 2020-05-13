@@ -8,12 +8,17 @@ module HarvestNotifier
       def generate # rubocop:disable Metrics/MethodLength
         Jbuilder.encode do |json|
           json.channel channel
-          json.blocks do
+          json.attachments do
             json.child! do
-              json.type "section"
-              json.text do
-                json.type "mrkdwn"
-                json.text "*Hooray, everyone reported the working hours!* :tada:"
+              json.text "Hooray, everyone reported the working hours!"
+              json.color "#7CD197"
+              json.actions do
+                json.child! do
+                  json.type "button"
+                  json.text "Go to Harvest"
+                  json.url url
+                  json.style "primary"
+                end
               end
             end
           end

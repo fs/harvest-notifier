@@ -24,18 +24,35 @@ describe HarvestNotifier::Report do
     }
   end
 
+  let(:john_doe) do
+    {
+      "harvest_id" => 678,
+      "email" => "john.doe@example.com",
+      "weekly_capacity" => 144_000,
+      "slack_id" => "U03TEST"
+    }
+  end
+
   let(:harvest_users) do
     {
       "users" => [
         {
           "id" => john_smith["harvest_id"],
           "email" => john_smith["email"],
-          "weekly_capacity" => john_smith["weekly_capacity"]
+          "weekly_capacity" => john_smith["weekly_capacity"],
+          "is_contractor" => false
         },
         {
           "id" => bill_doe["harvest_id"],
           "email" => bill_doe["email"],
-          "weekly_capacity" => bill_doe["weekly_capacity"]
+          "weekly_capacity" => bill_doe["weekly_capacity"],
+          "is_contractor" => false
+        },
+        {
+          "id" => john_doe["harvest_id"],
+          "email" => john_doe["email"],
+          "weekly_capacity" => john_doe["weekly_capacity"],
+          "is_contractor" => true
         }
       ]
     }
@@ -79,6 +96,10 @@ describe HarvestNotifier::Report do
     it "does not return John Smith with time report" do
       expect(report.daily(date)).not_to include(include(email: john_smith["email"]))
     end
+
+    it "does not return John Doe contractor" do
+      expect(report.daily(date)).not_to include(include(email: john_doe["email"]))
+    end
   end
 
   describe "#weekly" do
@@ -106,6 +127,10 @@ describe HarvestNotifier::Report do
     it "returns John Smith with missing 5 hours and empty Slack id" do
       expect(report.weekly(from, to))
         .to include(include(email: john_smith["email"], missing_hours: 4.75, slack_id: ""))
+    end
+
+    it "does not return John Doe contractor" do
+      expect(report.weekly(from, to)).not_to include(include(email: john_doe["email"]))
     end
 
     it "does not return Bill Doe with missing 1 hour b/c of threshold default 1.0 hour" do

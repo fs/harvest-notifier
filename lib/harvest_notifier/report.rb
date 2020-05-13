@@ -23,7 +23,7 @@ module HarvestNotifier
       users = with_slack(with_reports(report))
 
       filter(users) do |user|
-        without_weekly_capacity?(user) || whitelisted_user?(user) || time_reported?(user)
+        contractor?(user) || without_weekly_capacity?(user) || whitelisted_user?(user) || time_reported?(user)
       end
     end
 
@@ -32,7 +32,7 @@ module HarvestNotifier
       users = with_slack(with_reports(report))
 
       filter(users) do |user|
-        without_weekly_capacity?(user) || whitelisted_user?(user) || full_time_reported?(user)
+        contractor?(user) || without_weekly_capacity?(user) || whitelisted_user?(user) || full_time_reported?(user)
       end
     end
 
@@ -47,12 +47,13 @@ module HarvestNotifier
     def harvest_user(user)
       hours = user["weekly_capacity"].to_f / 3600
 
-      {
-        "email" => user["email"],
-        "weekly_capacity" => hours,
-        "missing_hours" => hours,
-        "total_hours" => 0
-      }
+      user.slice("email", "is_contractor").merge(
+        {
+          "weekly_capacity" => hours,
+          "missing_hours" => hours,
+          "total_hours" => 0
+        }
+      )
     end
 
     def prepare_slack_users(users)
@@ -108,6 +109,10 @@ module HarvestNotifier
 
     def missing_hours_insignificant?(user)
       user["missing_hours"] <= missing_hours_threshold
+    end
+
+    def contractor?(user)
+      user["is_contractor"]
     end
   end
 end

@@ -18,7 +18,8 @@ describe HarvestNotifier::Templates::WeeklyReport do
     end
 
     it "generates template with mentioning users" do
-      expect(template).to include("<@U02TEST>: *2.0* hours of 40.0")
+      expect(template).to include("@U02TEST")
+      expect(template).to include("*2.0* hours of 40.0")
     end
   end
 end

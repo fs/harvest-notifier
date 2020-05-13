@@ -8,7 +8,7 @@ describe HarvestNotifier::Templates::DailyReport do
 
     it "generates template with mentioning users" do
       expect(template).to include("Here is a list of people")
-      expect(template).to include("<@U02TEST>")
+      expect(template).to include("@U02TEST")
     end
   end
 end

@@ -34,10 +34,11 @@
       "required": false
     },
     "MISSING_HOURS_THRESHOLD": {
-      "description": "MISSING_HOURS_THRESHOLD is a variable that indicates the minimum threshold of hours at which the      employee will not be notified in Slack. For example, 2.5 or 4. The default threshold is 1 hour. Leave empty if satisfied with the default value.",
+      "description": "MISSING_HOURS_THRESHOLD is a variable that indicates the minimum threshold of hours at which the employee will not be notified in Slack. For example, 2.5 or 4. The default threshold is 1 hour. Leave empty if satisfied with the default value.",
       "required": false
     },
     "SLACK_CHANNEL": {
+      "description": "Default channel is general. Leave empty if satisfied with the default value.",
       "required": false
     }
   },

@@ -8,7 +8,7 @@ module HarvestNotifier
       REMINDER_TEXT = "*Guys, don't forget to report the working hours in Harvest every day.*"
       USERS_LIST_TEXT = "Here is a list of people who didn't report the working hours for *%<current_date>s*:"
       REPORT_NOTICE_TEXT = "_Please, report time and react with :heavy_check_mark: for this message._"
-      USER_ITEM = "• <%<slack_id>s>"
+      USER_ITEM = "• <@%<slack_id>s>"
 
       def generate # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         Jbuilder.encode do |json| # rubocop:disable Metrics/BlockLength

@@ -29,7 +29,6 @@ module HarvestNotifier
     private
 
     def unprocessable_entity(message)
-      puts "Env: #{@env}"
       puts "Params: #{request.params}"
       puts "Payload: #{payload_json}"
       puts "Error: #{message}"

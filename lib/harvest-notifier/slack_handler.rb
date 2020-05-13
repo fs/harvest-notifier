@@ -15,10 +15,9 @@ module HarvestNotifier
     def call(env)
       @env = env
 
-      return unprocessable_entity("Payload is missing") if payload_json.nil?
-      return unprocessable_entity("Empty Payload") if payload.nil?
-      return unprocessable_entity("Response URL is missing") if response_url.nil?
-      return unprocessable_entity("Action Type is missing") unless ACTION_TYPES.any?(report_params[:type])
+      return unprocessable_entity("Empty Payload") if payload.blank?
+      return unprocessable_entity("Response URL is missing") if response_url.blank?
+      return unprocessable_entity("Type is missing") unless ACTION_TYPES.any?(report_params[:type])
 
       update_report!
 
@@ -31,14 +30,19 @@ module HarvestNotifier
       @request ||= Rack::Request.new(@env)
     end
 
+    def unprocessable_entity(message)
+      puts "Error: #{message}"
+      [422, {}, ["Unprocessable entity: #{message}"]]
+    end
+
     def payload_json
-      @payload_json ||= request.params["payload"]
+      @payload_json ||= request.params["payload"] || ""
     end
 
     def payload
       @payload ||=
         begin
-          JSON.parse(request.params["payload"])
+          JSON.parse(payload_json)
         rescue JSON::ParserError
           nil
         end
@@ -48,22 +52,18 @@ module HarvestNotifier
       @response_url ||= payload["response_url"]
     end
 
-    def unprocessable_entity(message)
-      puts "Error: #{message}"
-      [422, {}, ["Unprocessable entity: #{message}"]]
+    def action_value
+      @action_value ||= payload.dig("actions", 0, "value") || ""
     end
 
     def report_params
       @report_params ||= begin
-        type, from, to = payload["actions"][0]["value"].split(":")
-
-        from = from.to_date
-        to = to.to_date unless to.nil?
+        type, from, to = action_value.split(":")
 
         {
           type: type,
-          from: from,
-          to: to
+          from: from&.to_date,
+          to: to&.to_date
         }
       end
     end

@@ -24,7 +24,7 @@ module HarvestNotifier
       users = report.daily(date)
 
       if users.empty?
-        notification.deliver :congratulation
+        notification.deliver :congratulation, date: date
       else
         notification.deliver :daily_report, users: users, date: date
       end
@@ -34,7 +34,7 @@ module HarvestNotifier
       users = report.weekly(date_from, date_to)
 
       if users.empty?
-        notification.deliver :congratulation
+        notification.deliver :congratulation, date_from: date_from, date_to: date_to
       else
         notification.deliver :weekly_report, users: users, date_from: date_from, date_to: date_to
       end

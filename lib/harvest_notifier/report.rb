@@ -63,15 +63,15 @@ module HarvestNotifier
     end
 
     def with_reports(reports)
-      reports["results"].each.with_object(harvest_users) do |report, result|
+      reports["results"].each.with_object(harvest_users) do |report, users|
         id = report["user_id"]
 
-        next unless result[id]
+        next unless users.include?(id)
 
         reported_hours = report["total_hours"].to_f
 
-        result[id]["missing_hours"] -= reported_hours
-        result[id]["total_hours"] += reported_hours
+        users[id]["missing_hours"] -= reported_hours
+        users[id]["total_hours"] += reported_hours
       end
     end
 

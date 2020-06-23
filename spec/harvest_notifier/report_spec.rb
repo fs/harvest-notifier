@@ -115,7 +115,7 @@ describe HarvestNotifier::Report do
       expect(report.daily(date)).not_to include(include(email: john_doe["email"]))
     end
 
-    it "does not return unactive user Alex Gordon" do
+    it "does not return inactive user Alex Gordon" do
       expect(report.daily(date)).not_to include(include(email: alex_gordon["email"]))
     end
   end

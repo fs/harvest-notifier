@@ -33,6 +33,15 @@ describe HarvestNotifier::Report do
     }
   end
 
+  let(:alex_gordon) do
+    {
+      "harvest_id" => 567,
+      "email" => "alex.gordon@example.com",
+      "weekly_capacity" => 144_000,
+      "slack_id" => "U04TEST"
+    }
+  end
+
   let(:harvest_users) do
     {
       "users" => [
@@ -83,6 +92,10 @@ describe HarvestNotifier::Report do
           {
             "user_id" => john_smith["harvest_id"],
             "total_hours" => 6.0
+          },
+          {
+            "user_id" => alex_gordon["harvest_id"],
+            "total_hours" => 5.0
           }
         ]
       }
@@ -100,6 +113,10 @@ describe HarvestNotifier::Report do
     it "does not return John Doe contractor" do
       expect(report.daily(date)).not_to include(include(email: john_doe["email"]))
     end
+
+    it "does not return unactive user Alex Gordon" do
+      expect(report.daily(date)).not_to include(include(email: alex_gordon["email"]))
+    end
   end
 
   describe "#weekly" do
@@ -115,6 +132,10 @@ describe HarvestNotifier::Report do
           {
             "user_id" => bill_doe["harvest_id"],
             "total_hours" => 39.00
+          },
+          {
+            "user_id" => alex_gordon["harvest_id"],
+            "total_hours" => 5.0
           }
         ]
       }
@@ -135,6 +156,10 @@ describe HarvestNotifier::Report do
 
     it "does not return Bill Doe with missing 1 hour b/c of threshold default 1.0 hour" do
       expect(report.weekly).not_to include(include(email: bill_doe["email"]))
+    end
+
+    it "does not return unactive user Alex Gordon" do
+      expect(report.weekly).not_to include(include(email: alex_gordon["email"]))
     end
   end
 end

@@ -65,6 +65,9 @@ module HarvestNotifier
     def with_reports(reports)
       reports["results"].each.with_object(harvest_users) do |report, result|
         id = report["user_id"]
+
+        next unless result[id]
+
         reported_hours = report["total_hours"].to_f
 
         result[id]["missing_hours"] -= reported_hours

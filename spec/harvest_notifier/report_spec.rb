@@ -38,7 +38,8 @@ describe HarvestNotifier::Report do
       "harvest_id" => 567,
       "email" => "alex.gordon@example.com",
       "weekly_capacity" => 144_000,
-      "slack_id" => "U04TEST"
+      "slack_id" => "U04TEST",
+      "is_active" => false
     }
   end
 

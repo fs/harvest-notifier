@@ -16,7 +16,7 @@ module HarvestNotifier
     end
 
     def users_list
-      self.class.get("/users.json?is_active=true")
+      self.class.get("/users.json")
     end
 
     def time_report_list(from, to = from)

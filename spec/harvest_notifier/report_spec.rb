@@ -38,8 +38,7 @@ describe HarvestNotifier::Report do
       "harvest_id" => 567,
       "email" => "alex.gordon@example.com",
       "weekly_capacity" => 144_000,
-      "slack_id" => "U04TEST",
-      "is_active" => false
+      "slack_id" => "U04TEST"
     }
   end
 
@@ -50,19 +49,29 @@ describe HarvestNotifier::Report do
           "id" => john_smith["harvest_id"],
           "email" => john_smith["email"],
           "weekly_capacity" => john_smith["weekly_capacity"],
-          "is_contractor" => false
+          "is_contractor" => false,
+          "is_active" => true
         },
         {
           "id" => bill_doe["harvest_id"],
           "email" => bill_doe["email"],
           "weekly_capacity" => bill_doe["weekly_capacity"],
-          "is_contractor" => false
+          "is_contractor" => false,
+          "is_active" => true
         },
         {
           "id" => john_doe["harvest_id"],
           "email" => john_doe["email"],
           "weekly_capacity" => john_doe["weekly_capacity"],
-          "is_contractor" => true
+          "is_contractor" => true,
+          "is_active" => true
+        },
+        {
+          "id" => alex_gordon["harvest_id"],
+          "email" => alex_gordon["email"],
+          "weekly_capacity" => alex_gordon["weekly_capacity"],
+          "is_contractor" => false,
+          "is_active" => false
         }
       ]
     }

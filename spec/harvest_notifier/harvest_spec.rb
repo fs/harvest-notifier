@@ -11,7 +11,7 @@ describe HarvestNotifier::Harvest do
     let(:harvest_users_list) { fixture("harvest_users_list") }
 
     before do
-      stub_request(:get, "https://api.harvestapp.com/api/v2/users.json?is_active=true")
+      stub_request(:get, "https://api.harvestapp.com/api/v2/users.json")
         .with(headers: headers)
         .to_return(body: harvest_users_list.to_json)
     end

@@ -23,7 +23,7 @@ module HarvestNotifier
       users = with_slack(with_reports(report))
 
       filter(users) do |user|
-        contractor?(user) || without_weekly_capacity?(user) || whitelisted_user?(user) || time_reported?(user)
+        not_notifiable?(user) || time_reported?(user)
       end
     end
 
@@ -32,11 +32,15 @@ module HarvestNotifier
       users = with_slack(with_reports(report))
 
       filter(users) do |user|
-        contractor?(user) || without_weekly_capacity?(user) || whitelisted_user?(user) || full_time_reported?(user)
+        not_notifiable?(user) || full_time_reported?(user)
       end
     end
 
     private
+
+    def not_notifiable?(user)
+      inactive?(user) || contractor?(user) || without_weekly_capacity?(user) || whitelisted_user?(user)
+    end
 
     def prepare_harvest_users(users)
       users["users"]
@@ -47,7 +51,7 @@ module HarvestNotifier
     def harvest_user(user)
       hours = user["weekly_capacity"].to_f / 3600
 
-      user.slice("email", "is_contractor").merge(
+      user.slice("email", "is_contractor", "is_active").merge(
         {
           "weekly_capacity" => hours,
           "missing_hours" => hours,
@@ -65,8 +69,6 @@ module HarvestNotifier
     def with_reports(reports)
       reports["results"].each.with_object(harvest_users) do |report, users|
         id = report["user_id"]
-
-        next unless users.include?(id)
 
         reported_hours = report["total_hours"].to_f
 
@@ -116,6 +118,10 @@ module HarvestNotifier
 
     def contractor?(user)
       user["is_contractor"]
+    end
+
+    def inactive?(user)
+      !user["is_active"]
     end
   end
 end

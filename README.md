@@ -28,7 +28,7 @@ This integration allows to:
 ## Quick Start
 
 1. Prepare access tokens
-  * Create Personal Access Tokens on Harvest: https://id.getharvest.com/developers
+  * Create Personal Access Tokens on [Harvest](https://id.getharvest.com/developers).
 
   * Create [Slack app](https://api.slack.com/apps). You can find official guide [here](https://slack.com/intl/en-ru/resources/using-slack/app-launch).
   * Create Bot User OAuth Access Token

@@ -1,35 +1,36 @@
-# Harvest Notifier Script
+# Slack Reminder
 
 [![Build Status](https://flatstack.semaphoreci.com/badges/harvest-notifier.svg)](https://flatstack.semaphoreci.com/projects/harvest-notifier)
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/fs/harvest-notifier)
 
-This is a ruby library to install on Daily Heroku Scheduler.
-It will notification in Slack about users who forgot to mark their working hours in Harvest.
-Notification determined from Harvest API V2.
+Slack Reminder is an integration between Harvest and Slack which automatically reminds users who forget to mark their working hours in Harvest.
+This is a Ruby 2.6.5 library for installation on Daily Heroku Scheduler.
+It will notify in Slack about users who forgot to mark their working hours in Harvest.
+Notification is determined from Harvest API V2.
 
-## Work examples
+## Features
 
-There are 2 types of reports: daily and weekly.
-  * Daily Report is generated on weekdays except Monday and shows those users who did not fill in the time for the last day.
-  * A weekly report is generated every Monday and shows those users who need to report the required working hours for last week.
+There are 2 types of reports: Daily and Weekly.
+
+- Daily Report is generated on weekdays (except Monday) and shows those users who did not fill in their time for that day.
+
+- Weekly Report is generated every Monday and shows those users who still need to report the required working hours for last week.
+
+This integration allows to:
+- mention users in the Slack
+- refresh report result
+- quickly report the working hours from the link
+- set up custom report schedule
+- configure a whitelist which consists of users, who don't need to be notified in Slack
+
+![Example](https://user-images.githubusercontent.com/49876756/86122099-e32be700-badf-11ea-8c0a-7cd86d047948.png)
 
 ## Quick Start
 
-1. Сlone repo
-```bash
-git clone git@github.com:fs/harvest-notifier.git
-cd harvest-notifier
-```
-
-2. Setup project
-```bash
-bin/setup
-```
-
-3. Prepare access tokens
+1. Prepare access tokens
   * Create Personal Access Tokens on Harvest: https://id.getharvest.com/developers
 
-  * Create Slack app: https://api.slack.com/apps
+  * Create [Slack app](https://api.slack.com/apps). You can find official guide [here](https://slack.com/intl/en-ru/resources/using-slack/app-launch).
   * Create Bot User OAuth Access Token
   * Add following scopes to Bot:
       ```bash
@@ -39,9 +40,9 @@ bin/setup
       ```
   * Add app to Slack channel.
 
-4. [Deploy to Heroku](https://heroku.com/deploy?template=https://github.com/fs/harvest-notifier)
+2. [Deploy to Heroku](https://heroku.com/deploy?template=https://github.com/fs/harvest-notifier)
 
-5. Configure following ENV variables
+3. Configure following ENV variables
     ```bash
     heroku config:set HARVEST_TOKEN=harvest-token
     heroku config:set HARVEST_ACCOUNT_ID=harvest-account-id
@@ -55,7 +56,7 @@ bin/setup
     # For example, 2.5 or 4. The default threshold is 1 hour. Leave empty if satisfied with the default value.
     ```
 
-6. Add job in Heroku Scheduler
+4. Add job in Heroku Scheduler
 
   * ```bin/rake reports:daily``` for daily report
   * ```bin/rake reports:weekly``` for weekly report
@@ -72,7 +73,21 @@ bin/setup
 
 ## Develop
 
-`bin/build` checks your specs and runs quality tools
+1. Сlone repo
+```bash
+git clone git@github.com:fs/harvest-notifier.git
+cd harvest-notifier
+```
+
+2. Setup project
+```bash
+bin/setup
+```
+
+3. Check specs and run quality tools
+```bash
+bin/build
+```
 
 ## Credits
 

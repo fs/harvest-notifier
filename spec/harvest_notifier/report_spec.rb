@@ -169,7 +169,7 @@ describe HarvestNotifier::Report do
 
     it "returns John Smith with missing 5 hours and empty Slack id" do
       expect(report.weekly(from, to))
-        .to include(include(email: john_smith["email"], missing_hours: 4.75, slack_id: "", full_name: john_smith["full_name"]))
+        .to include(include(email: john_smith["email"], missing_hours: 4.75, full_name: john_smith["full_name"]))
     end
 
     it "does not return John Doe contractor" do

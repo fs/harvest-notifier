@@ -50,9 +50,11 @@ module HarvestNotifier
 
     def harvest_user(user)
       hours = user["weekly_capacity"].to_f / 3600
+      full_name = user.values_at("first_name", "last_name").join(" ")
 
       user.slice("email", "is_contractor", "is_active").merge(
         {
+          "full_name" => full_name,
           "weekly_capacity" => hours,
           "missing_hours" => hours,
           "total_hours" => 0

@@ -2,6 +2,7 @@
   "name": "Harvest Notifier",
   "description": "Automatic notification script for Slack based on Harvest data",
   "repository": "https://github.com/fs/harvest-notifier/",
+  "stack": "heroku-18",
   "keywords": [
     "harvest",
     "notification",
@@ -45,7 +46,7 @@
   "addons": [
     "deadmanssnitch:the-lone-snitch",
     "scheduler:standard",
-    "rollbar:free"
+    "rollbar:trial-5k"
   ],
   "buildpacks": [
     {
